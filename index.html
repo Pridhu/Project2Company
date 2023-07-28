@@ -24,7 +24,10 @@
                 </li>
             </ul>
             <h1 class="flex-grow-1 text-center d-none d-sm-block">Company Directory</h1>
-            <i class="bi bi-plus-circle plus-icon me-2"></i>
+            <button type="button" class="btn btn-secondary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#personnelAddModal">
+                <i class="bi bi-plus-circle plus-icon"></i>
+            </button>
+                        
             <form class="d-flex" role="search">
                 <input class="form-control ms-2" id="searchInput" type="search" placeholder="Search" aria-label="Search">
             </form>
@@ -45,7 +48,66 @@
         </div>
     </div>
     
+    <!--*******************************************Add Personnel Modal******************************************************-->
+    <div id="personnelAddModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="personnelAddModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">     
+            <div class="modal-content shadow"> 
+                <div class="modal-header bg-secondary bg-gradient text-white">
+                    <h5 class="modal-title">Add Employee</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">   
+                    <form id="exampleForm">
+                        <input type="hidden" id="employeeID">
+                        <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="firstName" placeholder="First name" required>
+                        <label for="firstName">First name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
+                        <label for="lastName">Last name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="jobTitle" placeholder="Job title" required>
+                        <label for="jobTitle">Job Title</label>
+                        </div>          
+                        <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="emailAddress" placeholder="Email address" required>
+                        <label for="emailAddress">Email Address</label>
+                        </div>    
+                        <div class="form-floating">
+                        <select class="form-select" id="addDepartmentDropdown" placeholder="Department">
+                        </select>
+                        <label for="department">Department</label>
+                        </div>  
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="exampleForm" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <!-------------------------------------------------------AlertModal--------------------------------------------------------------->
+    <div id="addAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+          <div class="modal-content shadow">           
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalTitle"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div> 
+        </div>    
+    </div>
+      
     <script src="JavaScript/jquery-3.6.4.min.js"></script>
+    <script src="bootstrap-5.2.3/js/bootstrap.min.js"></script>
     <script src="JavaScript/script.js"></script>
 </body>
 </html>

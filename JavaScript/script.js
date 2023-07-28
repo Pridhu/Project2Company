@@ -20,8 +20,7 @@ $(document).ready(function () {
             }
         });
     }
-
-    // Initial data fetch when the page loads
+    // On page load fetch the initial data//
     fetchDataFromPHP();
 
     /*******************************************************SearchBar***********************************************************************/
@@ -29,18 +28,16 @@ $(document).ready(function () {
     searchInput.on("input", function () {
         var searchQuery = searchInput.val().trim().toLowerCase();
         var rowContainer = $("#cardRow");
-
-        // Clear the existing rows
         rowContainer.empty();
 
-        // If the search query is empty, display all the original data
+        // Displays the original data when the search query is empty//
         if (searchQuery === "") {
             generateCards(originalData);
             return;
         }
 
         var filteredData = originalData.filter(function (person) {
-            // Filter the data based on the search query
+            
             var fullName = (person.firstName + " " + person.lastName).toLowerCase();
             var department = person.department.toLowerCase();
             var location = person.location.toLowerCase();
@@ -53,28 +50,21 @@ $(document).ready(function () {
             );
         });
 
-        // Generate cards for the filtered data
         generateCards(filteredData);
     });
 
     // Function to generate cards based on data
     function generateCards(data) {
         var rowContainer = $("#cardRow");
-
         // Initialize a counter to keep track of cards in the current row
         var cardCounter = 0;
         var cardsPerRow = 4;
-
         var numRows = Math.ceil(data.length / cardsPerRow);
 
-        // Create a for loop to generate the cards and manage rows
         for (var i = 0; i < numRows; i++) {
-            // Create a new row
             var row = $("<div class='row text-center'></div>");
-
             rowContainer.append(row);
 
-            // Create cards for each person in this row
             for (var j = 0; j < cardsPerRow; j++) {
                 var dataIndex = i * cardsPerRow + j;
 
@@ -82,7 +72,6 @@ $(document).ready(function () {
                     var person = data[dataIndex];
                     var fullName = person.firstName + " " + person.lastName;
 
-                    // Create a new card for the person's information
                     var personCard =
                         "<div class='col-md-3'>" +
                         "<div class='card border-secondary mb-3'>" +
@@ -101,10 +90,88 @@ $(document).ready(function () {
 
                     row.append(personCard);
                 } else {
-                    // If we have run out of data, break out of the loop
                     break;
                 }
             }
         }
     }
+
+    /****************************************************************Personnel Add Modal*****************************************************************/
+
+  // Function to open the modal and trigger the AJAX call to get personnel data
+  $('#personnelAddModal').on('show.bs.modal', function (e) {
+    $.ajax({
+        url: "Php/getPersonnelByID.php",
+        type: 'GET',
+        dataType: 'json',
+        success: function (result) {
+          var resultCode = result.status.code;
+      
+          if (resultCode == 200) {
+            var departments = result.data.department;
+            departments.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+            var departmentSelect = $('#addDepartmentDropdown');
+            departmentSelect.empty();
+
+            departments.forEach(function (department) {
+              var option = $('<option></option>').attr('value', department.id).text(department.name);
+              departmentSelect.append(option);
+              
+            });
+            /*console.log(result);*/
+          } else {
+            $('#personnelAddModal .modal-title').text("Error retrieving data");
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $('#personnelAddModal .modal-title').text("Error retrieving data");
+        }
+      });
+      
+  });
+
+  $("#exampleForm").submit(function (event) {
+    event.preventDefault(); 
+
+    // Fetch form data
+    var formData = {
+      firstName: $("#firstName").val(),
+      lastName: $("#lastName").val(),
+      jobTitle: $("#jobTitle").val(),
+      email: $("#emailAddress").val(),
+      departmentID: $("#addDepartmentDropdown").val()
+    };
+
+    /*console.log("Department ID:", formData.departmentID);*/
+
+    $.ajax({
+        url: "Php/insertPersonnel.php",
+        type: "POST",
+        data: formData,
+        success: function (response) {
+          if (response.status.code === "200") {
+            $('#exampleForm')[0].reset();
+            /*console.log(response);*/
+          } 
+          // Set the employee details in the second modal's title
+        $("#addAlertModal #modalTitle").text("Alert");
+        $("#addAlertModal #modalBody").text("Employee details of " + formData.firstName + ", " + formData.lastName + " added successfully!");
+
+        $("#addAlertModal").modal("show");
+        $("#personnelAddModal").modal("hide");
+        },
+        error: function (xhr, status, error) {
+          alert("An error occurred while processing the request.");
+        }
+      });
+    });
+
+  $('#personnelAddModal').on('shown.bs.modal', function () {
+    $('#firstName').focus();
+  });
+
+  $('#personnelAddModal').on('hidden.bs.modal', function () {
+    $('#exampleForm')[0].reset();
+  });
+
 });
