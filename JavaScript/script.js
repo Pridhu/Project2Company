@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    // Store the original data fetched from PHP
     var originalData;
+    var employeeId;
 
     function fetchDataFromPHP() {
         $.ajax({
@@ -10,6 +10,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.status.code === "200") {
                     originalData = response.data;
+                    /*console.log(originalData);*/
                     generateCards(originalData);
                 } else {
                     console.error("Error: Unable to fetch data from PHP.");
@@ -38,11 +39,13 @@ $(document).ready(function () {
 
         var filteredData = originalData.filter(function (person) {
             
+            /*var employeeId= person.id.toLowerCase();*/
             var fullName = (person.firstName + " " + person.lastName).toLowerCase();
             var department = person.department.toLowerCase();
             var location = person.location.toLowerCase();
             var email = person.email.toLowerCase();
             return (
+                /*employeeId.includes(searchQuery) ||*/
                 fullName.includes(searchQuery) ||
                 department.includes(searchQuery) ||
                 location.includes(searchQuery) ||
@@ -53,7 +56,6 @@ $(document).ready(function () {
         generateCards(filteredData);
     });
 
-    // Function to generate cards based on data
     function generateCards(data) {
         var rowContainer = $("#cardRow");
         // Initialize a counter to keep track of cards in the current row
@@ -82,8 +84,8 @@ $(document).ready(function () {
                         "<p> " + person.email + "</p>" +
                         "</div>" +
                         "<div class='card-footer bg-light'>" +
+                        "<button class='btn btn-link card-link btn-update' data-id='" + person.id + "'><i class='bi bi-pencil-fill'></i></button>" +
                         "<button class='btn btn-link card-link btn-trash'><i class='bi bi-trash-fill'></i></button>" +
-                        "<button class='btn btn-link card-link'><i class='bi bi-pencil-fill'></i></button>" +
                         "</div>" +
                         "</div>" +
                         "</div>";
@@ -94,11 +96,15 @@ $(document).ready(function () {
                 }
             }
         }
+            // Attach click event listener for the "Update" button
+            $(".btn-update").on("click", function() {
+                employeeId = $(this).attr("data-id");
+                /*console.log(employeeId);*/
+                $("#personnelUpdateModal").modal('show', { 'employeeId': employeeId });
+            })
     }
-
-    /****************************************************************Personnel Add Modal*****************************************************************/
-
-  // Function to open the modal and trigger the AJAX call to get personnel data
+    
+  /****************************************************************Personnel Add Modal*****************************************************************/
   $('#personnelAddModal').on('show.bs.modal', function (e) {
     $.ajax({
         url: "Php/getPersonnelByID.php",
@@ -130,10 +136,9 @@ $(document).ready(function () {
       
   });
 
-  $("#exampleForm").submit(function (event) {
+  $("#addForm").submit(function (event) {
     event.preventDefault(); 
 
-    // Fetch form data
     var formData = {
       firstName: $("#firstName").val(),
       lastName: $("#lastName").val(),
@@ -141,7 +146,7 @@ $(document).ready(function () {
       email: $("#emailAddress").val(),
       departmentID: $("#addDepartmentDropdown").val()
     };
-
+    console.log(formData);
     /*console.log("Department ID:", formData.departmentID);*/
 
     $.ajax({
@@ -150,8 +155,8 @@ $(document).ready(function () {
         data: formData,
         success: function (response) {
           if (response.status.code === "200") {
-            $('#exampleForm')[0].reset();
-            /*console.log(response);*/
+            $('#addForm')[0].reset();
+            console.log(response);
           } 
           // Set the employee details in the second modal's title
         $("#addAlertModal #modalTitle").text("Alert");
@@ -171,7 +176,104 @@ $(document).ready(function () {
   });
 
   $('#personnelAddModal').on('hidden.bs.modal', function () {
-    $('#exampleForm')[0].reset();
+    $('#addForm')[0].reset();
   });
 
+  /**********************************************************Update Personnel Modal****************************************************************************************/
+    $('#personnelUpdateModal').on('show.bs.modal', function (e) {
+        /*console.log("Employee ID:", employeeId);*/
+        $.ajax({
+            url: "Php/getPersonnelByID.php",
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                id:employeeId
+            },
+            success: function (result) {
+                console.log(result);
+                var resultCode = result.status.code;
+
+                if (resultCode == 200) {
+                    console.log("Employee ID:", result.data.personnel[0].id);
+                    console.log("First Name:", result.data.personnel[0].firstName);
+                    $('#employeeId').val(result.data.personnel[0].id);
+                    $('#updateFirstName').val(result.data.personnel[0].firstName);
+                    $('#updateLastName').val(result.data.personnel[0].lastName);
+                    $('#updateJobTitle').val(result.data.personnel[0].jobTitle);
+                    $('#email').val(result.data.personnel[0].email);
+
+                    
+                    $('#updateDepartmentDropdown').empty();
+                    $.each(result.data.department, function () {
+                        $('#updateDepartmentDropdown').append($("<option>", {
+                            value: this.id,
+                            text: this.name
+                        }));
+                    });
+
+                    $('#updateDepartmentDropdown').val(result.data.personnel[0].departmentID);
+
+                    // Show the update modal after data is fetched and populated
+                    $("#personnelUpdateModal").modal('show');
+                } else {
+                    $('#personnelUpdateModal .modal-title').text("Error retrieving data");
+                }
+            },
+            
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#personnelUpdateModal .modal-title').text("Error retrieving data");
+            }
+        });
+
+    });
+
+/*****************************************************Update function*********************************************************************************** */
+
+    $('#updateForm').on("submit", function (e) {
+        e.preventDefault();
+    
+        // Get the updated values from the form fields
+        var employeeId = $('#employeeId').val();
+        var updatedFirstName = $('#updateFirstName').val();
+        var updatedLastName = $('#updateLastName').val();
+        var updatedJobTitle = $('#updateJobTitle').val();
+        var updatedEmail = $('#email').val();
+        var updatedDepartmentID = $('#updateDepartmentDropdown').val();
+    
+        // AJAX call to update the personnel data
+        $.ajax({
+            url: "Php/updatePersonnel.php",
+            type: 'POST', 
+            dataType: 'json',
+            data: {
+                id: employeeId,
+                firstName: updatedFirstName,
+                lastName: updatedLastName,
+                jobTitle: updatedJobTitle,
+                email: updatedEmail,
+                departmentID: updatedDepartmentID
+            },
+            success: function (result) {
+                console.log(result);
+                $("#updateAlertModal #modalUpdateTitle").text("Alert");
+                $("#updateAlertModal #modalUpdateBody").text("Employee details of " + updatedFirstName + ", " + updatedLastName + " updated successfully!");
+                $("#updateAlertModal").modal("show");
+                $("#personnelUpdateModal").modal('hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error updating personnel data:", errorThrown);
+            }
+        });
+    });
+
+    $('#personnelUpdateModal').on('shown.bs.modal', function () {
+    $('#firstName').focus(); 
+    });
+
+    $('#personnelUpdateModal').on('hidden.bs.modal', function () {  
+    $('#updateForm')[0].reset();  
+    });
+
+  
+  
 });

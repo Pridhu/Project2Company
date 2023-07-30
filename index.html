@@ -57,7 +57,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">   
-                    <form id="exampleForm">
+                    <form id="addForm">
                         <input type="hidden" id="employeeID">
                         <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="firstName" placeholder="First name" required>
@@ -73,7 +73,7 @@
                         </div>          
                         <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="emailAddress" placeholder="Email address" required>
-                        <label for="emailAddress">Email Address</label>
+                        <label for="emailAddress">Email</label>
                         </div>    
                         <div class="form-floating">
                         <select class="form-select" id="addDepartmentDropdown" placeholder="Department">
@@ -83,14 +83,14 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" form="exampleForm" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
+                    <button type="submit" form="addForm" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
                     <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
                 </div>
             </div>
         </div>   
     </div>
 
-    <!-------------------------------------------------------AlertModal--------------------------------------------------------------->
+    <!-------------------------------------------------------Add AlertModal for Personnel--------------------------------------------------------------->
     <div id="addAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
           <div class="modal-content shadow">           
@@ -105,7 +105,79 @@
           </div> 
         </div>    
     </div>
-      
+ 
+    <!------------------------------------------------------------Update Personnel Modal----------------------------------------------------------------------->
+   <div id="personnelUpdateModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="personnelUpdateModalLabel" aria-hidden="true">  
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
+        <div class="modal-content shadow"> 
+          
+          <div class="modal-header bg-secondary bg-gradient text-white">
+            <h5 class="modal-title">Update employee</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+    
+          <div class="modal-body">
+              
+            <form id="updateForm">
+    
+              <input type="hidden" id="employeeId">
+    
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="updateFirstName" placeholder="First name" required>
+                <label for="updateFirstName">First name</label>
+              </div>
+    
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="updateLastName" placeholder="Last name" required>
+                <label for="updateLastName">Last name</label>
+              </div>
+    
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="updateJobTitle" placeholder="Job title" required>
+                <label for="updateJobTitle">Job Title</label>
+              </div>          
+    
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="Email address" required>
+                <label for="email">Email</label>
+              </div>    
+    
+              <div class="form-floating">
+                <select class="form-select" id="updateDepartmentDropdown" placeholder="Department">
+                </select>
+                <label for="department">Department</label>
+              </div>  
+    
+            </form>
+    
+          </div>
+    
+          <div class="modal-footer">
+            <button type="submit" form="updateForm" class="btn btn-outline-secondary btn-sm myBtn">Update</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+          </div>
+     
+        </div>  
+      </div>
+    
+    </div>  
+
+    <!-------------------------------------------------------Update AlertModal for Personnel--------------------------------------------------------------->
+    <div id="updateAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+          <div class="modal-content shadow">           
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalUpdateTitle"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalUpdateBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div> 
+        </div>    
+    </div>
+
     <script src="JavaScript/jquery-3.6.4.min.js"></script>
     <script src="bootstrap-5.2.3/js/bootstrap.min.js"></script>
     <script src="JavaScript/script.js"></script>
