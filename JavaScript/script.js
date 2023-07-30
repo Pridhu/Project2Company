@@ -54,6 +54,7 @@ $(document).ready(function () {
         });
 
         generateCards(filteredData);
+        fetchDataFromPHP();
     });
 
     function generateCards(data) {
@@ -157,6 +158,7 @@ $(document).ready(function () {
           if (response.status.code === "200") {
             $('#addForm')[0].reset();
             console.log(response);
+             fetchDataFromPHP();
           } 
           // Set the employee details in the second modal's title
         $("#addAlertModal #modalTitle").text("Alert");
