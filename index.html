@@ -10,42 +10,71 @@
     <link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
+    
+  <div class="container-fluid">
     <nav class="navbar navbar-expand-sm bg-light fixed-top">   
-        <div class="container-fluid">
-            <ul class="nav nav-tabs me-3" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="home-tab" href="#" data-bs-toggle="tab" data-bs-target="#home-tab-pane" role="tab" aria-controls="home-tab-pane" aria-selected="true"><i class="bi bi-person contact-directory-icon"></i></a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link text-dark" id="department-tab" href="#" data-bs-toggle="tab" data-bs-target="#department-tab-pane" type="button" role="tab" aria-controls="department-tab-pane" aria-selected="false"><i class="bi bi-building"></i></a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link text-dark" id="location-tab" href="#" data-bs-toggle="tab" data-bs-target="#location-tab-pane" type="button" role="tab" aria-controls="location-tab-pane" aria-selected="false"><i class="bi bi-geo-alt"></i></a>
-                </li>
-            </ul>
-            <h1 class="flex-grow-1 text-center d-none d-sm-block">Company Directory</h1>
-            <button type="button" class="btn btn-secondary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#personnelAddModal">
-                <i class="bi bi-plus-circle plus-icon"></i>
-            </button>
-                        
-            <form class="d-flex" role="search">
-                <input class="form-control ms-2" id="searchInput" type="search" placeholder="Search" aria-label="Search">
-            </form>
-        </div>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="home-tab" href="#" data-bs-toggle="tab" data-bs-target="#home-tab-pane" role="tab" aria-controls="home-tab-pane" aria-selected="true"><i class="bi bi-person contact-directory-icon"></i></a>
+          </li>
+          <li class="nav-item" role="presentation">
+              <a class="nav-link text-dark" id="department-tab" href="#" data-bs-toggle="tab" data-bs-target="#department-tab-pane" type="button" role="tab" aria-controls="department-tab-pane" aria-selected="false"><i class="bi bi-building"></i></a>
+          </li>
+          <li class="nav-item" role="presentation">
+              <a class="nav-link text-dark" id="location-tab" href="#" data-bs-toggle="tab" data-bs-target="#location-tab-pane" type="button" role="tab" aria-controls="location-tab-pane" aria-selected="false"><i class="bi bi-geo-alt"></i></a>
+          </li>
+      </ul>
+      <h1 class="flex-grow-1 text-center d-none d-sm-block">Company Directory</h1>
+      <button type="button" class="btn btn-secondary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#personnelAddModal">
+          <i class="bi bi-plus-circle plus-icon"></i>
+      </button>
+                  
+      <form class="d-flex" role="search">
+          <input class="form-control ms-2" id="searchInput" type="search" placeholder="Search" aria-label="Search">
+      </form>
     </nav>
+  </div>
+  <div class="container-fluid sticky-top">
+    <nav class="navbar navbar-expand-sm bg-light">
+      <div class="container-fluid">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <button type="button" class="btn btn-secondary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#personnelAddModal">
+            <i class="bi bi-plus-circle plus-icon"></i>
+        </button>
+                    
+        <form class="d-flex" role="search">
+            <input class="form-control ms-2" id="searchInput" type="search" placeholder="Search" aria-label="Search">
+        </form>
+        </ul>
+      </div>
+    </nav>
+  </div>
+   
     
     <div class="container mt-5">
-        <div class="row text-center" id="cardRow">
-            <div class="col-sm-3">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                        <div class="card-body"></div>
-                    </div>
-                    <div class="tab-pane fade" id="department-tab-pane" role="tabpanel" aria-labelledby="department-tab" tabindex="0">...</div>
-                    <div class="tab-pane fade" id="location-tab-pane" role="tabpanel" aria-labelledby="location-tab" tabindex="0">...</div>
-                </div>
+      <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            <div class="row text-center" id="cardPersonnelRow">
+              <div class="col-sm-3">
+                <div class="cardPersonnelbody"></div>
+              </div>
             </div>
-        </div>
+          </div>
+          <div class="tab-pane fade" id="department-tab-pane" role="tabpanel" aria-labelledby="department-tab" tabindex="0">
+            <div class="row text-center" id="cardDepartmentRow">
+              <div class="col-sm-3">
+                <div class="cardDepartmentbody"></div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="location-tab-pane" role="tabpanel" aria-labelledby="location-tab" tabindex="0">
+            <div class="row text-center" id="cardLocationRow">
+              <div class="col-sm-3">
+                <div class="cardLocationbody"></div>
+              </div>
+            </div>
+          </div>
+      </div>        
     </div>
     
     <!--*******************************************Add Personnel Modal******************************************************-->
@@ -177,6 +206,43 @@
           </div> 
         </div>    
     </div>
+
+    <!--------------------------------------------------------Remove Personnel Modal------------------------------------------------------------------------>
+    <div id="personnelRemoveModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="personnelRemoveModal" aria-hidden="true">  
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
+        <div class="modal-content shadow"> 
+          
+          <div class="modal-header bg-secondary bg-gradient text-white">
+            <h5 class="removePersonnelTitle">Remove employee</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="removePersonnelBody">    
+              <p id="deleteConfirmation"></p>
+          </div>
+    
+          <div class="modal-footer">
+            <button type="submit" form="removeForm" class="btn btn-outline-secondary btn-sm deletePerBtn">Remove</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+          </div>
+     
+        </div>  
+      </div>
+    </div> 
+    <!-------------------------------------------------------Remove AlertModal for Personnel--------------------------------------------------------------->
+    <div id="removeAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+        <div class="modal-content shadow">           
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalRmoveTitle"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalRemoveBody"></div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div> 
+      </div>    
+  </div>
 
     <script src="JavaScript/jquery-3.6.4.min.js"></script>
     <script src="bootstrap-5.2.3/js/bootstrap.min.js"></script>
