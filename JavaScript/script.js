@@ -3,7 +3,7 @@ $(document).ready(function () {
     var employeeId;
     var filteredData;
 
-    function fetchDataFromPHP() {
+    function fetchPersonnelData(searchQuery = "") {
         $.ajax({
             url: "Php/getAll.php",
             type: "GET",
@@ -12,8 +12,25 @@ $(document).ready(function () {
                 if (response.status.code === "200") {
                     originalData = response.data;
                     /*console.log(originalData);*/
-                    generateCards(originalData);
-                    
+        
+                    // If a search query is provided, filter the data
+                    if (searchQuery.trim() !== "") {
+                        filteredData = originalData.filter(function (person) {
+                            var fullName = (person.firstName + " " + person.lastName).toLowerCase();
+                            var department = person.department.toLowerCase();
+                            var location = person.location.toLowerCase();
+                            var email = person.email.toLowerCase();
+                            return (
+                                fullName.includes(searchQuery) ||
+                                department.includes(searchQuery) ||
+                                location.includes(searchQuery) ||
+                                email.includes(searchQuery)
+                            );
+                        });
+                        generateCards(filteredData);
+                    } else {
+                        generateCards(originalData);
+                    }
                 } else {
                     console.error("Error: Unable to fetch data from PHP.");
                 }
@@ -23,40 +40,17 @@ $(document).ready(function () {
             }
         });
     }
-    // On page load fetch the initial data//
-    fetchDataFromPHP();
 
-    /*******************************************************SearchBar***********************************************************************/
-    var searchInput = $("#searchInput");
-    searchInput.on("input", function () {
-        var searchQuery = searchInput.val().trim().toLowerCase();
+    // On page load fetch the initial data
+    fetchPersonnelData();
+
+    /*******************************************************SearchBarPersonnel***********************************************************************/
+    var searchPersonnelInput = $("#searchPersonnelInput");
+    searchPersonnelInput.on("input", function () {
+        var searchQuery = searchPersonnelInput.val().trim().toLowerCase();
         var rowContainer = $("#cardPersonnelRow");
         rowContainer.empty();
-
-        // Displays the original data when the search query is empty//
-        if (searchQuery === "") {
-            generateCards(originalData);
-            return;
-        }
-
-        filteredData = originalData.filter(function (person) {
-            
-            /*var employeeId= person.id.toLowerCase();*/
-            var fullName = (person.firstName + " " + person.lastName).toLowerCase();
-            var department = person.department.toLowerCase();
-            var location = person.location.toLowerCase();
-            var email = person.email.toLowerCase();
-            return (
-                /*employeeId.includes(searchQuery) ||*/
-                fullName.includes(searchQuery) ||
-                department.includes(searchQuery) ||
-                location.includes(searchQuery) ||
-                email.includes(searchQuery)
-            );
-        });
-
-        generateCards(filteredData);
-
+        fetchPersonnelData(searchQuery);
     });
 
     function generateCards(data) {
@@ -99,6 +93,7 @@ $(document).ready(function () {
                 }
             }
         }
+
         // Attach click event listener for the "Update" button
         $(".btn-update").on("click", function() {
             employeeId = $(this).attr("data-id");
@@ -113,6 +108,101 @@ $(document).ready(function () {
         });
     }
     
+/***************************************************************************Department*********************************************************************************/
+function fetchDepartmentData(searchQuery = "") {
+    $.ajax({
+        url: "Php/getAllDepartments.php",
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (response.status.code === "200") {
+                var departmentData = response.data;
+                //var departmentName = response.data[0].name;
+                console.log(departmentData);
+                //console.log(departmentName);
+    
+                // If a search query is provided, filter the data
+                if (searchQuery.trim() !== "") {
+                    var filteredDepartment = departmentData.filter(function (department) {
+                        var departmentName = department.name.toLowerCase();
+                        return departmentName.includes(searchQuery);
+                    });
+                    generateDepartmentCards(filteredDepartment);
+                } else {
+                    generateDepartmentCards(departmentData);
+                }
+            } else {
+                console.error("Error: Unable to fetch data from PHP.");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+        }
+    });
+}
+
+// On page load fetch the initial data
+fetchDepartmentData();
+
+/*******************************************************SearchBarDepartment***********************************************************************/
+var searchDepartmentInput = $("#searchDepartmentInput");
+searchDepartmentInput.on("input", function () {
+    var searchQuery = searchDepartmentInput.val().trim().toLowerCase();
+    var rowContainer = $("#cardDepartmentRow");
+    rowContainer.empty();
+    fetchDepartmentData(searchQuery);
+});
+
+function  generateDepartmentCards(data) {
+    var rowContainer = $("#cardDepartmentRow");
+    // Initialize a counter to keep track of cards in the current row
+    var cardCounter = 0;
+    var cardsPerRow = 2;
+    var numRows = Math.ceil(data.length / cardsPerRow);
+
+    for (var i = 0; i < numRows; i++) {
+        var row = $("<div class='row text-center justify-content-center'></div>");
+        rowContainer.append(row);
+
+        for (var j = 0; j < cardsPerRow; j++) {
+            var dataIndex = i * cardsPerRow + j;
+
+            if (dataIndex < data.length) {
+                var departmentName = data[dataIndex].name;
+                var departmentCard =
+                    "<div class='col-md-3'>" +
+                    "<div class='card border-secondary mb-3'>" +
+                    "<div class='cardDepartmentbody department-info'>" +
+                    "<p> " + departmentName + "</p>" +
+                    "</div>" +
+                    "<div class='card-footer bg-light'>" +
+                    "<button class='btn btn-link card-link btn-update'><i class='bi bi-pencil-fill'></i></button>" +
+                    "<button class='btn btn-link card-link btn-trash'><i class='bi bi-trash-fill'></i></button>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>";
+
+                row.append(departmentCard);
+            } else {
+                break;
+            }
+        }
+    }
+
+    // Attach click event listener for the "Update" button
+   /* $(".btn-update").on("click", function() {
+        employeeId = $(this).attr("data-id");
+        /*console.log(employeeId);*/
+        /*$("#personnelUpdateModal").modal('show');
+    })
+
+    // Attach click event listener for the "Trash" button
+    $(".btn-trash").on("click", function() {
+        employeeId = $(this).attr("data-id");
+        $("#personnelRemoveModal").modal('show');
+    });*/
+}
+
   /****************************************************************Personnel Add Modal*****************************************************************/
   $('#personnelAddModal').on('show.bs.modal', function (e) {
     $.ajax({
@@ -166,7 +256,7 @@ $(document).ready(function () {
           if (response.status.code === "200") {
             $('#addForm')[0].reset();
             console.log(response);
-            fetchDataFromPHP();
+            fetchPersonnelData();
           } 
           // Set the employee details in the second modal's title
         $("#addAlertModal #modalTitle").text("Alert");
@@ -264,6 +354,7 @@ $(document).ready(function () {
             success: function (result) {
                 var resultCode = result.status.code;
                 //console.log(result);//
+                
                 if (resultCode == 200) {
                     $("#updateAlertModal #modalUpdateTitle").text("Alert");
                     $("#updateAlertModal #modalUpdateBody").text("Employee details of " + updatedFirstName + ", " + updatedLastName + " updated successfully!");
