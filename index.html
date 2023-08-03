@@ -66,9 +66,7 @@
           </div>
         </div>
       </div>
-    </div>        
-  
-    
+    </div>         
     <!--*******************************************Add Personnel Modal******************************************************-->
     <div id="personnelAddModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="personnelAddModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">     
@@ -235,6 +233,40 @@
         </div> 
       </div>    
   </div>
+  <!---------------------------------------------------------------Department Add Modal---------------------------------------------------------------------->
+  <div id="departmentAddModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="departmentAddModal" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">     
+        <div class="modal-content shadow"> 
+            <div class="modal-header bg-secondary bg-gradient text-white">
+                <h5 class="modal-title">Add Department</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">   
+                <form id="addDepartmentForm">
+                    <input type="hidden" id="departmentID">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="departmentName" placeholder="Department name" required>
+                    <label for="departmentName">Department name</label>
+                    </div>   
+                    <div class="form-floating">
+                    <select class="form-select" id="addLocationDropdown" placeholder="Location">
+                    </select>
+                    <label for="location">Location</label>
+                    </div>  
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="addDepartmentForm" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>   
+</div>
+
+
+
+
+
 
     <script src="JavaScript/jquery-3.6.4.min.js"></script>
     <script src="bootstrap-5.2.3/js/bootstrap.min.js"></script>
