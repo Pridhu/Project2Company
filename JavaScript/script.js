@@ -493,12 +493,11 @@ function  generateDepartmentCards(data) {
                 console.log(response);
                 fetchDepartmentData();
               } 
-              // Set the employee details in the second modal's title
-            /*$("#addAlertModal #modalTitle").text("Alert");
-            $("#addAlertModal #modalBody").text("Employee details of " + formData.firstName + ", " + formData.lastName + " added successfully!");
-    
-            $("#addAlertModal").modal("show");
-            $("#departmentAddModal").modal("hide");*/
+            
+            $("#addDepartmentAlertModal #modalDptAlertTitle").text("Alert");
+            $("#addDepartmentAlertModal #modalDptAlerBody").text("Department " + departmentName + " added successfully!");
+            $("#addDepartmentAlertModal").modal("show");
+            $("#departmentAddModal").modal("hide");
             },
             error: function (xhr, status, error) {
               alert("An error occurred while processing the request.");
