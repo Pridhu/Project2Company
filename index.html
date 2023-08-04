@@ -133,10 +133,8 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
   
-        <div class="modal-body">
-            
+        <div class="modal-body">    
           <form id="updateForm">
-  
             <input type="hidden" id="employeeId">
   
             <div class="form-floating mb-3">
@@ -166,7 +164,6 @@
             </div>  
   
           </form>
-  
         </div>
   
         <div class="modal-footer">
@@ -256,7 +253,7 @@
       </div>
     </div>   
   </div>
-  <!-------------------------------------------------------Add AlertModal for Personnel--------------------------------------------------------------->
+  <!-------------------------------------------------------Add AlertModal for Department--------------------------------------------------------------->
   <div id="addDepartmentAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
       <div class="modal-content shadow">           
@@ -271,8 +268,56 @@
       </div> 
     </div>    
   </div>
+  <!------------------------------------------------------------Update Department Modal----------------------------------------------------------------------->
+  <div id="departmentUpdateModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="departmentUpdateModalLabel" aria-hidden="true">  
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
+      <div class="modal-content shadow"> 
+        
+        <div class="modal-header bg-secondary bg-gradient text-white">
+          <h5 class="modal-title">Update department</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">    
+          <form id="updateDepartmentForm">
+            <input type="hidden" id="departmentID">
+  
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="updateDepartmentName" placeholder="Department name" required>
+              <label for="updateDepartmentName">Department name</label>
+            </div>
 
-
+            <div class="form-floating">
+              <select class="form-select" id="updateLocationDropdown" placeholder="Location">
+              </select>
+              <label for="location">Location</label>
+            </div>  
+  
+          </form>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" form="updateDepartmentForm" class="btn btn-outline-secondary btn-sm myBtn">Update</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+        </div>
+      </div>  
+    </div>
+  </div>  
+  <!-------------------------------------------------------Update AlertModal for Department--------------------------------------------------------------->
+  <div id="updateDepartmentAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+      <div class="modal-content shadow">           
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalDptUpdateTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalDptUpdateBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div> 
+    </div>    
+  </div>
 
 
 
