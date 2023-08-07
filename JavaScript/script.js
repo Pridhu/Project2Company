@@ -3,6 +3,8 @@ $(document).ready(function () {
     var employeeId;
     var filteredData;
     var departmentId;
+    //var deptName;
+    var departmentRemoveName;
 
     function fetchPersonnelData(searchQuery = "") {
         $.ajax({
@@ -220,8 +222,8 @@ $(document).ready(function () {
             console.log('Button on click id');
             console.log(departmentId);
             departmentRemoveName= $(this).attr("data-department-name");
-            //console.log(departmentName);
-            deleteDepartmentDetails ();
+            console.log(departmentRemoveName);
+            checkDepartmentDetails ();
         }
            
              /*if (type === "department") {
@@ -663,8 +665,9 @@ $(document).ready(function () {
     
       });*/
     
-    function deleteDepartmentDetails () {
+    function checkDepartmentDetails () {
         console.log('hi');
+        
         console.log(departmentRemoveName);
         //$(".deleteDeptBtn").click(function() {
 
@@ -673,26 +676,31 @@ $(document).ready(function () {
             type: 'POST',
             dataType: 'json',
             data: {
-              id: departmentId 
+              id: departmentId,
             },
             success: function (result) {
-                         
+                console.log(result);       
               if (result.status.code == 200) {
-                console.log(data);
-                if (result.data[0].personnelCount == 0) {
-                    console.log(result.data[0].personnelCount);
-                    console.log(result.data[0].name);
-                  
+               
+                if (result.data.personnelCount == 0) {
+                    //deptName = result.data.name;
+                    //console.log("Department Name: " + result.data.name); 
+                    //console.log(result.data.personnelCount);
+                    //console.log(deptName);
                   $("#areYouSureDeptName").val(departmentRemoveName);
         
                   $('#areYouSureDeleteDepartmentModal').modal("show");
+                 // deleteDepartmentDetails();
                   
                 } else {
-                                    
+                    console.log(result.data.personnelCount);
+                    //deptName = result.data.name;
+                   // console.log(deptName);
+                   // console.log("Department Name: " + result.data.name);
                   $("#cantDeleteDeptName").val(departmentRemoveName);
-                  $("#pc").text(result.data[0].personnelCount);
-                  
+                  $("#pc").text(result.data.personnelCount);
                   $('#cantDeleteDepartmentModal').modal("show");          
+                  //deleteDepartmentDetails();
                   
                 }
                 
@@ -706,10 +714,36 @@ $(document).ready(function () {
             error: function (jqXHR, textStatus, errorThrown) {
               $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
             }
-          });
+        });
         
     }
-
+   /* function deleteDepartmentDetails () {
+        console.log('Delete Department');
+        $.ajax({
+            url: "Php/deleteDepartmentByID.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              id: departmentId,
+            },
+            success: function (result) {
+                console.log(result);       
+              if (result.status.code == 200) {
+                 $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
+                $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + updatedDepartmentName + " removed successfully!");
+                $("#removeDepartmentAlertModal").modal("show");
+              } else {
+        
+                $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+        
+              } 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+            }
+        });
+          
+      }*/
 
 });
 
