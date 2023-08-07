@@ -2,7 +2,7 @@ $(document).ready(function () {
     var originalData;
     var employeeId;
     var filteredData;
-    //var departmentId;
+    var departmentId;
 
     function fetchPersonnelData(searchQuery = "") {
         $.ajax({
@@ -70,6 +70,7 @@ $(document).ready(function () {
 
                 if (dataIndex < data.length) {
                     var person = data[dataIndex];
+                    //console.log(person);
                     var fullName = person.firstName + " " + person.lastName;
 
                     var personCard =
@@ -113,110 +114,123 @@ $(document).ready(function () {
         });
     }
     
-/***************************************************************************Department*********************************************************************************/
-function fetchDepartmentData(searchQuery = "") {
-    $.ajax({
-        url: "Php/getAllDepartments.php",
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-            if (response.status.code === "200") {
-                var departmentData = response.data;
-                //var departmentName = response.data[0].name;
-                //console.log(departmentData);
-                //console.log(departmentName);
-    
-                // If a search query is provided, filter the data
-                if (searchQuery.trim() !== "") {
-                    var filteredDepartment = departmentData.filter(function (department) {
-                        var departmentName = department.name.toLowerCase();
-                        return departmentName.includes(searchQuery);
-                    });
-                    generateDepartmentCards(filteredDepartment);
+    /***************************************************************************Department*********************************************************************************/
+    function fetchDepartmentData(searchQuery = "") {
+        $.ajax({
+            url: "Php/getAllDepartments.php",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                if (response.status.code === "200") {
+                    var departmentData = response.data;
+                    //var departmentName = response.data[0].name;
+                    //console.log(departmentData);
+                    //console.log(departmentName);
+        
+                    // If a search query is provided, filter the data
+                    if (searchQuery.trim() !== "") {
+                        var filteredDepartment = departmentData.filter(function (department) {
+                            var departmentName = department.name.toLowerCase();
+                            return departmentName.includes(searchQuery);
+                        });
+                        generateDepartmentCards(filteredDepartment);
+                    } else {
+                        generateDepartmentCards(departmentData);
+                    }
                 } else {
-                    generateDepartmentCards(departmentData);
+                    console.error("Error: Unable to fetch data from PHP.");
                 }
-            } else {
-                console.error("Error: Unable to fetch data from PHP.");
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("AJAX Error:", status, error);
-        }
-    });
-}
-
-// On page load fetch the initial data
-fetchDepartmentData();
-
-/*******************************************************SearchBarDepartment***********************************************************************/
-var searchDepartmentInput = $("#searchDepartmentInput");
-searchDepartmentInput.on("input", function () {
-    var searchQuery = searchDepartmentInput.val().trim().toLowerCase();
-    var rowContainer = $("#cardDepartmentRow");
-    rowContainer.empty();
-    fetchDepartmentData(searchQuery);
-});
-
-function  generateDepartmentCards(data) {
-    var rowContainer = $("#cardDepartmentRow");
-    // Initialize a counter to keep track of cards in the current row
-    var cardCounter = 0;
-    var cardsPerRow = 2;
-    var numRows = Math.ceil(data.length / cardsPerRow);
-
-    for (var i = 0; i < numRows; i++) {
-        var row = $("<div class='row text-center justify-content-center'></div>");
-        rowContainer.append(row);
-
-        for (var j = 0; j < cardsPerRow; j++) {
-            var dataIndex = i * cardsPerRow + j;
-
-            if (dataIndex < data.length) {
-                var departmentName = data[dataIndex].name;
-                //console.log(departmentName);
-                var departmentId = data[dataIndex].id;
-                //console.log(departmentId);
-                var departmentCard =
-                    "<div class='col-md-3'>" +
-                    "<div class='card border-secondary mb-3'>" +
-                    "<div class='cardDepartmentbody department-info'>" +
-                    "<p> " + departmentName + "</p>" +
-                    "</div>" +
-                    "<div class='card-footer bg-light'>" +
-                    "<button class='btn btn-link card-link btn-update' data-type='department' data-department-id='" + departmentId + "'><i class='bi bi-pencil-fill'></i></button>" +
-                    "<button class='btn btn-link card-link btn-trash'  data-department-id='" +  departmentId + "''><i class='bi bi-trash-fill'></i></button>" +
-                    "</div>" +
-                    "</div>" +
-                    "</div>";
-
-                row.append(departmentCard);
-            } else {
-                break;
-            }
-        }
+        });
     }
 
-    // Attach click event listener for the "Update" button
-    $(".btn-update").on("click", function() {
-        var type = $(this).data("type");
-        departmentId = $(this).attr("data-department-id");
-        console.log(departmentId);
-        if (type === "department") {
-            $("#departmentUpdateModal").data("department-id", departmentId);
-         $("#departmentUpdateModal").modal('show');
-        }
-    })
+    // On page load fetch the initial data
+    fetchDepartmentData();
 
-    // Attach click event listener for the "Trash" button
-    /*$(".btn-trash").on("click", function() {
-        var type = $(this).data("type");
-        departmentId = $(this).attr("data-id");
-        if (type === "department") {
-            $("#departmentUpdateModal").modal('show');
+    /*******************************************************SearchBarDepartment***********************************************************************/
+    var searchDepartmentInput = $("#searchDepartmentInput");
+    searchDepartmentInput.on("input", function () {
+        var searchQuery = searchDepartmentInput.val().trim().toLowerCase();
+        var rowContainer = $("#cardDepartmentRow");
+        rowContainer.empty();
+        fetchDepartmentData(searchQuery);
+    });
+
+    function  generateDepartmentCards(data) {
+        var rowContainer = $("#cardDepartmentRow");
+        // Initialize a counter to keep track of cards in the current row
+        var cardCounter = 0;
+        var cardsPerRow = 2;
+        var numRows = Math.ceil(data.length / cardsPerRow);
+
+        for (var i = 0; i < numRows; i++) {
+            var row = $("<div class='row text-center justify-content-center'></div>");
+            rowContainer.append(row);
+
+            for (var j = 0; j < cardsPerRow; j++) {
+                var dataIndex = i * cardsPerRow + j;
+
+                if (dataIndex < data.length) {
+                    var department = data[dataIndex];
+                    //console.log(department);
+                    var departmentName = department.name;
+                    //console.log(departmentName);
+                    //var departmentName = data[dataIndex].name;
+                    //console.log(departmentName);
+                    //var departmentId = data[dataIndex].id;
+                    //console.log(departmentId);
+                    var departmentCard =
+                        "<div class='col-md-3'>" +
+                        "<div class='card border-secondary mb-3'>" +
+                        "<div class='cardDepartmentbody department-info'>" +
+                        "<p> " + departmentName + "</p>" +
+                        "</div>" +
+                        "<div class='card-footer bg-light'>" +
+                        "<button class='btn btn-link card-link btn-update' data-type='department' data-department-id='" + department.id + "'><i class='bi bi-pencil-fill'></i></button>" +
+                        "<button class='btn btn-link card-link deleteDeptBtn btn-trash'  data-type='department' data-department-id='" + department.id + "' data-department-name='" + departmentName + "'><i class='bi bi-trash-fill'></i></button>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>";
+
+                    row.append(departmentCard);
+                } else {
+                    break;
+                }
+            }
         }
-    });*/
-}
+
+        // Attach click event listener for the "Update" button
+        $(".btn-update").on("click", function() {
+            var type = $(this).data("type");
+            departmentId = $(this).attr("data-department-id");
+            console.log(departmentId);
+            if (type === "department") {
+            $("#departmentUpdateModal").modal('show');
+            }
+        })
+
+        // Attach click event listener for the "Trash" button
+        $(".btn-trash").on("click", function() {
+            var type = $(this).data("type");
+           if (type === "department") {
+            departmentId = $(this).attr("data-department-id");
+            console.log('Button on click id');
+            console.log(departmentId);
+            departmentRemoveName= $(this).attr("data-department-name");
+            //console.log(departmentName);
+            deleteDepartmentDetails ();
+        }
+           
+             /*if (type === "department") {
+                departmentId = $(this).attr("data-department-id");
+                console.log(departmentId);
+            $("#departmentRemoveModal").modal('show');
+            }*/
+        });
+    }
 
   /****************************************************************Personnel Add Modal*****************************************************************/
   $('#personnelAddModal').on('show.bs.modal', function (e) {
@@ -429,29 +443,29 @@ function  generateDepartmentCards(data) {
     function deletePersonnelDetails (removefirstName,removelastName) {
         $(".deletePerBtn").click(function() {
             console.log('Remove Function');
-        $.ajax({
-            url: "Php/removePersonnelById.php",
-            type: 'POST',
-            dataType: 'json',
-            data: {
-            id: employeeId
-            },
-            success: function (result) {
-                var resultCode = result.status.code;  
-                //console.log(result);//
-                if (resultCode == 200) {
-                $("#removeAlertModal #modalRmoveTitle").text("Alert");
-                $("#removeAlertModal #modalRemoveBody").text("Employee details of " + removefirstName + ", " + removelastName + " removed successfully!");
-                $("#removeAlertModal").modal("show");
-                $('#personnelRemoveModal').modal('hide');
-                }else {
-                    $("#removeAlertModal #modalRmoveTitle").text("Error retrieving data");
+            $.ajax({
+                url: "Php/removePersonnelById.php",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                id: employeeId
+                },
+                success: function (result) {
+                    var resultCode = result.status.code;  
+                    //console.log(result);//
+                    if (resultCode == 200) {
+                    $("#removeAlertModal #modalRmoveTitle").text("Alert");
+                    $("#removeAlertModal #modalRemoveBody").text("Employee details of " + removefirstName + ", " + removelastName + " removed successfully!");
+                    $("#removeAlertModal").modal("show");
+                    $('#personnelRemoveModal').modal('hide');
+                    }else {
+                        $("#removeAlertModal #modalRmoveTitle").text("Error retrieving data");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error removing the entry. Please try again later.");
                 }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-            alert("Error removing the entry. Please try again later.");
-            }
-        });
+            });
         });
     }
      /*****************************************************************Add Department***********************************************************************/ 
@@ -489,8 +503,8 @@ function  generateDepartmentCards(data) {
 
         var departmentName = $("#departmentName").val();
         var locationId = $("#addLocationDropdown").val();
-    console.log(departmentName);
-    console.log(locationId);
+        //console.log(departmentName);
+        //console.log(locationId);
 
     $.ajax({
         url: "Php/insertDepartment.php",
@@ -502,7 +516,7 @@ function  generateDepartmentCards(data) {
         success: function (response) {
             if (response.status.code === "200") {
             $('#addDepartmentForm')[0].reset();
-            console.log(response);
+            //console.log(response);
             fetchDepartmentData();
             } 
         
@@ -527,7 +541,7 @@ function  generateDepartmentCards(data) {
 
     /**********************************************************Update Department Modal****************************************************************************************/
     $('#departmentUpdateModal').on('show.bs.modal', function (e) {
-        var departmentId = $(this).data("department-id");
+        //var departmentId = $(this).data("department-id");
         //console.log("Department ID:", departmentId);
         $.ajax({
             url: "Php/getDepartmentByID.php",
@@ -619,7 +633,82 @@ function  generateDepartmentCards(data) {
     $('#updateDepartmentForm')[0].reset();  
     });
 
+    /*****************************************************************Remove Department***********************************************************************/ 
+    /*$('#departmentRemoveModal').on('show.bs.modal', function (e) {
 
+        $.ajax({
+          url: "Php/checkDepartment.php",
+          type: 'GET',
+          dataType: 'json',
+          data: {
+            id: departmentId
+          },
+          success: function (result) {
+            console.log(result);
+            var resultCode = result.status.code;
+    
+            if (resultCode == 200) {
+              //console.log("Department ID:", result.data[0].id);
+              console.log("Department Name:", result.data[0].name);
+              //var removeDepartmentName = result.data.[0].name;
+              //$('#deleteDeptConfirmation').text("Are you sure you want to delete the personnel details of " + removefirstName + " " + removelastName + "?");
+              //$("cantDeleteDeptName").val( result.data[0].name);
+              //deleteDepartmentDetails();
+            } 
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            $('#departmentRemoveModal .modal-title').text("Error retrieving data");
+          }
+        });
+    
+      });*/
+    
+    function deleteDepartmentDetails () {
+        console.log('hi');
+        console.log(departmentRemoveName);
+        //$(".deleteDeptBtn").click(function() {
+
+        $.ajax({
+            url: "Php/checkDepartment.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              id: departmentId 
+            },
+            success: function (result) {
+                         
+              if (result.status.code == 200) {
+                console.log(data);
+                if (result.data[0].personnelCount == 0) {
+                    console.log(result.data[0].personnelCount);
+                    console.log(result.data[0].name);
+                  
+                  $("#areYouSureDeptName").val(departmentRemoveName);
+        
+                  $('#areYouSureDeleteDepartmentModal').modal("show");
+                  
+                } else {
+                                    
+                  $("#cantDeleteDeptName").val(departmentRemoveName);
+                  $("#pc").text(result.data[0].personnelCount);
+                  
+                  $('#cantDeleteDepartmentModal').modal("show");          
+                  
+                }
+                
+              } else {
+        
+                $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+        
+              } 
+        
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+            }
+          });
+        
+    }
 
 
 });
