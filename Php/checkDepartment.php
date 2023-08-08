@@ -56,20 +56,22 @@
 		 echo json_encode($output);
 		 exit;
 	}
+	// No associated personnel, safe to delete the department.
+
+	if ($result['personnelCount'] === 0) {
 	
-	if ($deleteQuery === false) {
-
-		$output['status']['code'] = "400";
-		$output['status']['name'] = "failed";
-		$output['status']['description'] = "Department has associated personnel. Cannot delete.";	
-		$output['data'] = [];
-
-		mysqli_close($conn);
-
-		echo json_encode($output); 
-		exit;
-	}
-
+		$output['status']['code'] = "200";
+		$output['status']['name'] = "ok";
+		$output['status']['description'] = "Success";
+		$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+		$output['data']['personnelCount'] = $result['personnelCount'];
+	 
+		 mysqli_close($conn);
+	 
+		 echo json_encode($output);
+		 exit;
+	
+		}
 	
 	mysqli_close($conn);
 

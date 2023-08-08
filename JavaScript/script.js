@@ -681,27 +681,20 @@ $(document).ready(function () {
             success: function (result) {
                 console.log(result);       
               if (result.status.code == 200) {
-               
+               //console.log('Value of departmentRemoveName:', departmentRemoveName);
                 if (result.data.personnelCount == 0) {
-                    //deptName = result.data.name;
-                    //console.log("Department Name: " + result.data.name); 
-                    //console.log(result.data.personnelCount);
-                    //console.log(deptName);
-                  $("#areYouSureDeptName").val(departmentRemoveName);
-        
+                  //$("#areYouSureDeptName").val(departmentRemoveName);
                   $('#areYouSureDeleteDepartmentModal').modal("show");
-                 // deleteDepartmentDetails();
-                  
+                  deleteDepartmentDetails(departmentId); 
+                
                 } else {
                     console.log(result.data.personnelCount);
-                    //deptName = result.data.name;
-                   // console.log(deptName);
-                   // console.log("Department Name: " + result.data.name);
-                  $("#cantDeleteDeptName").val(departmentRemoveName);
                   $("#pc").text(result.data.personnelCount);
-                  $('#cantDeleteDepartmentModal').modal("show");          
-                  //deleteDepartmentDetails();
-                  
+                  $('#cantDeleteDepartmentModal').modal("show");     
+                  $('#cantDeleteDepartmentModal').on('shown.bs.modal', function () {
+                   // $("#cantDeleteDeptName").val(departmentRemoveName);
+                });     
+                   
                 }
                 
               } else {
@@ -717,7 +710,7 @@ $(document).ready(function () {
         });
         
     }
-   /* function deleteDepartmentDetails () {
+    function deleteDepartmentDetails (departmentId) {
         console.log('Delete Department');
         $.ajax({
             url: "Php/deleteDepartmentByID.php",
@@ -730,7 +723,7 @@ $(document).ready(function () {
                 console.log(result);       
               if (result.status.code == 200) {
                  $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
-                $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + updatedDepartmentName + " removed successfully!");
+                $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + departmentRemoveName + " removed successfully!");
                 $("#removeDepartmentAlertModal").modal("show");
               } else {
         
@@ -743,7 +736,7 @@ $(document).ready(function () {
             }
         });
           
-      }*/
+      }
 
 });
 
