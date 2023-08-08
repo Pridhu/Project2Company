@@ -1,10 +1,10 @@
 $(document).ready(function () {
     var originalData;
     var employeeId;
-    var filteredData;
     var departmentId;
-    //var deptName;
     var departmentRemoveName;
+    var locationId;
+    var locationRemoveName;
 
     function fetchPersonnelData(searchQuery = "") {
         $.ajax({
@@ -18,7 +18,7 @@ $(document).ready(function () {
         
                     // If a search query is provided, filter the data
                     if (searchQuery.trim() !== "") {
-                        filteredData = originalData.filter(function (person) {
+                        var filteredData = originalData.filter(function (person) {
                             var fullName = (person.firstName + " " + person.lastName).toLowerCase();
                             var department = person.department.toLowerCase();
                             var location = person.location.toLowerCase();
@@ -116,7 +116,7 @@ $(document).ready(function () {
         });
     }
     
-    /***************************************************************************Department*********************************************************************************/
+    /********************************************************Department*********************************************************************************/
     function fetchDepartmentData(searchQuery = "") {
         $.ajax({
             url: "Php/getAllDepartments.php",
@@ -225,12 +225,118 @@ $(document).ready(function () {
             //console.log(departmentRemoveName);
             checkDepartmentDetails ();
         }
-           
-             /*if (type === "department") {
-                departmentId = $(this).attr("data-department-id");
-                console.log(departmentId);
-            $("#departmentRemoveModal").modal('show');
-            }*/
+        });
+    }
+
+  /***********************************************************Location*********************************************************************************/ 
+    function fetchLocationData(searchQuery = "") {
+        $.ajax({
+            url: "Php/getAllLocations.php",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                if (response.status.code === "200") {
+                    var locationData = response.data;
+                    //var locationName = response.data[0].name;
+                    //console.log(locationData);
+                    //console.log(locationName);
+        
+                    // Search query to filter the data
+                    if (searchQuery.trim() !== "") {
+                        var filteredLocation = locationData.filter(function (location) {
+                            var locationName = location.name.toLowerCase();
+                            return locationName.includes(searchQuery);
+                        });
+                        generateLocationCards(filteredLocation);
+                    } else {
+                        generateLocationCards(locationData);
+                    }
+                } else {
+                    console.error("Error: Unable to fetch data from PHP.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+            }
+        });
+    }
+
+    // On page load fetch the initial data
+    fetchLocationData();
+
+    /*******************************************************SearchBarLocation***********************************************************************/
+    var searchLocationInput = $("#searchLocationInput");
+    searchLocationInput.on("input", function () {
+        var searchQuery = searchLocationInput.val().trim().toLowerCase();
+        var rowContainer = $("#cardLocationRow");
+        rowContainer.empty();
+        fetchLocationData(searchQuery);
+    });
+
+    function  generateLocationCards(data) {
+        var rowContainer = $("#cardLocationRow");
+        // Initialize a counter to keep track of cards in the current row
+        var cardCounter = 0;
+        var cardsPerRow = 2;
+        var numRows = Math.ceil(data.length / cardsPerRow);
+
+        for (var i = 0; i < numRows; i++) {
+            var row = $("<div class='row text-center justify-content-center'></div>");
+            rowContainer.append(row);
+
+            for (var j = 0; j < cardsPerRow; j++) {
+                var dataIndex = i * cardsPerRow + j;
+
+                if (dataIndex < data.length) {
+                    var location = data[dataIndex];
+                    //console.log(location);
+                    var locationName = location.name;
+                    //console.log(locationName);
+                    //var locationName = data[dataIndex].name;
+                    //console.log(locationName);
+                    //var locationId = data[dataIndex].id;
+                    //console.log(locationId);
+                    var locationCard =
+                        "<div class='col-md-3'>" +
+                        "<div class='card border-secondary mb-3'>" +
+                        "<div class='cardDepartmentbody department-info'>" +
+                        "<p> " + locationName + "</p>" +
+                        "</div>" +
+                        "<div class='card-footer bg-light'>" +
+                        "<button class='btn btn-link card-link btn-updatelocation' data-type='location' data-location-id='" + location.id + "'><i class='bi bi-pencil-fill'></i></button>" +
+                        "<button class='btn btn-link card-link deleteDeptBtn btn-trash'  data-type='location' data-location-id='" + location.id + "' data-location-name='" + locationName + "'><i class='bi bi-trash-fill'></i></button>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>";
+
+                    row.append(locationCard);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        // Attach click event listener for the "Update" button
+        $(".btn-updatelocation").on("click", function() {
+            var type = $(this).data("type");
+            locationId = $(this).attr("data-location-id");
+            console.log(locationId);
+            if (type === "location") {
+            $("#locationUpdateModal").modal('show');
+            }
+        })
+
+        // Attach click event listener for the "Trash" button
+        $(".btn-trash").on("click", function() {
+            var type = $(this).data("type");
+           if (type === "location") {
+            locationId = $(this).attr("data-location-id");
+            //console.log('Button on click id');
+            //console.log(locationId);
+            locationRemoveName= $(this).attr("data-location-name");
+            //console.log(locationRemoveName);
+            checkLocationDetails ();
+        }
         });
     }
 
@@ -709,7 +815,141 @@ $(document).ready(function () {
       });
     }
 
+    /*****************************************************************Add Location***********************************************************************/ 
+    $('#locationAddModal').on('show.bs.modal', function (e) {
+    
+        $("#addLocationForm").submit(function (event) {
+        event.preventDefault(); 
+    
+            var locationName = $("#locationName").val();
+            //var locationId = $("#addLocationDropdown").val();
+            //console.log(locationName);
+            //console.log(locationId);
+    
+        $.ajax({
+            url: "Php/insertLocation.php",
+            type: "POST",
+            data: {
+            name: locationName,   // Include the location name in the data payload
+            },
+            success: function (response) {
+                if (response.status.code === "200") {
+                $('#addLocationForm')[0].reset();
+                //console.log(response);
+                fetchLocationData();
+                } 
+            
+            $("#addLocationAlertModal #modalLocationAlertTitle").text("Alert");
+            $("#addLocationAlertModal #modalLocationAlerBody").text("Location " + locationName + " added successfully!");
+            $("#addLocationAlertModal").modal("show");
+            $("#locationAddModal").modal("hide");
+            },
+            error: function (xhr, status, error) {
+                alert("An error occurred while processing the request.");
+            }
+            });
+        });
+    
+        $('#locationAddModal').on('shown.bs.modal', function () {
+            $('#locationName').focus();
+        });
+    
+        $('#locationAddModal').on('hidden.bs.modal', function () {
+            $('#addLocationForm')[0].reset();
+        });  
+    });
+         
+    /**********************************************************Update Location Modal****************************************************************************************/
+    $('#locationUpdateModal').on('show.bs.modal', function (e) {
+        //var locationId = $(this).data("location-id");
+        //console.log("Location ID:", locationId);
+        $.ajax({
+            url: "Php/getLocationByID.php",
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                id:locationId
+            },
+            success: function (result) {
+                //console.log(result);//
+                var resultCode = result.status.code;
 
+                if (resultCode == 200) {
+                    //console.log(result);
+                   //console.log("Location Name:", result.data[0].name);
+                    $('#locationID').val(result.data[0].id);
+                   $('#updateLocationName').val(result.data[0].name);
+                
+                    /*$('#updateLocationDropdown').empty();
+                    $.each(result.data.location, function () {
+                        $('#updateLocationDropdown').append($("<option>", {
+                            value: this.id,
+                            text: this.name
+                        }));
+                    });
+
+                    $('#updateLocationDropdown').val(result.data[0].locationID);*/
+
+                    // Show the update modal after data is fetched and populated
+                    $("#locationUpdateModal").modal('show');
+                } else {
+                    $('#locationUpdateModal .modal-title').text("Error retrieving data");
+                }
+            },
+            
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#locationUpdateModal .modal-title').text("Error retrieving data");
+            }
+        });
+
+    });
+    /*****************************************************Update function*********************************************************************************** */
+    /*$('#updateLocationForm').on("submit", function (e) {
+        e.preventDefault();
+        // Get the updated values from the form fields
+        var locationId = $('#locationID').val();
+        var updatedLocationName = $('#updateLocationName').val();
+        //var updatedLocationID = $('#updateLocationDropdown').val();
+        //console.log(locationId);
+        console.log(updatedLocationName);
+        //console.log(updatedLocationID);
+
+        // AJAX call to update the personnel data
+        $.ajax({
+            url: "Php/updateDepartment.php",
+            type: 'POST', 
+            dataType: 'json',
+            data: {
+                id: departmentId,
+                name: updatedDepartmentName,
+                locationID: updatedLocationID
+            },
+            success: function (result) {
+                var resultCode = result.status.code;
+                //console.log(result);//
+                
+                if (resultCode == 200) {
+                    $("#updateDepartmentAlertModal #modalDptUpdateTitle").text("Alert");
+                    $("#updateDepartmentAlertModal #modalDptUpdateBody").text("Department " + updatedDepartmentName + " updated successfully!");
+                    $("#updateDepartmentAlertModal").modal("show");
+                    $("#departmentUpdateModal").modal('hide');
+                } else {
+                    $('#updateDepartmentAlertModal #modalUpdateTitle').text("Error retrieving data");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error updating personnel data:", errorThrown);
+            }
+        });
+    });
+
+    $('#departmentUpdateModal').on('shown.bs.modal', function () {
+    $('#updateDepartmentForm').focus(); 
+    });
+
+    $('#departmentUpdateModal').on('hidden.bs.modal', function () {  
+    $('#updateDepartmentForm')[0].reset();  
+    });*/
 
 });
 

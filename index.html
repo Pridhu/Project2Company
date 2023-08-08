@@ -25,6 +25,8 @@
     <h1 class="flex-grow-1 text-center d-none d-sm-block">Company Directory</h1>
   </div>
   <div class="tab-content" id="myTabContent">
+    <!----------------------------------------------------------------Personnel NavTab------------------------------------------------------------------------------->
+
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
       <div class="container-fluid mt-5 pt-lg-5">
         <nav class="navbar bg-light">
@@ -42,6 +44,9 @@
         </div>
       </div>
     </div>
+
+    <!----------------------------------------------------------------Department NavTab------------------------------------------------------------------------------->
+
     <div class="tab-pane fade" id="department-tab-pane" role="tabpanel" aria-labelledby="department-tab" tabindex="0">
       <div class="container-fluid mt-5 pt-lg-5">
         <nav class="navbar bg-light">
@@ -59,7 +64,20 @@
         </div>
       </div>
     </div>
+
+    <!----------------------------------------------------------------Location NavTab------------------------------------------------------------------------------->
+
     <div class="tab-pane fade" id="location-tab-pane" role="tabpanel" aria-labelledby="location-tab" tabindex="0">
+      <div class="container-fluid mt-5 pt-lg-5">
+        <nav class="navbar bg-light">
+          <button type="button" class="btn btn-secondary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#locationAddModal">
+            <i class="bi bi-plus-circle plus-icon"></i>
+          </button>             
+          <form class="d-flex" role="search">
+            <input class="form-control ms-2" id="searchLocationInput" type="search" placeholder="Search" aria-label="Search">
+          </form>
+        </nav>
+      </div>
       <div class="row text-center" id="cardLocationRow">
         <div class="col-sm-3">
           <div class="cardLocationbody"></div>
@@ -67,7 +85,7 @@
       </div>
     </div>
   </div>         
-  <!--*******************************************Add Personnel Modal******************************************************-->
+  <!--------------------------------------------------------Add Personnel Modal----------------------------------------------------------------------->
   <div id="personnelAddModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="personnelAddModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">     
       <div class="modal-content shadow"> 
@@ -123,7 +141,7 @@
       </div> 
     </div>    
   </div>
-  <!------------------------------------------------------------Update Personnel Modal----------------------------------------------------------------------->
+  <!-------------------------------------------------------Update Personnel Modal----------------------------------------------------------------------->
   <div id="personnelUpdateModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="personnelUpdateModalLabel" aria-hidden="true">  
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
       <div class="modal-content shadow"> 
@@ -224,7 +242,7 @@
       </div> 
     </div>    
   </div>
-  <!---------------------------------------------------------------Department Add Modal---------------------------------------------------------------------->
+  <!-------------------------------------------------------Department Add Modal------------------------------------------------------------------------->
   <div id="departmentAddModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="departmentAddModal" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">     
       <div class="modal-content shadow"> 
@@ -268,7 +286,7 @@
       </div> 
     </div>    
   </div>
-  <!------------------------------------------------------------Update Department Modal----------------------------------------------------------------------->
+  <!--------------------------------------------------------Update Department Modal----------------------------------------------------------------------->
   <div id="departmentUpdateModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="departmentUpdateModalLabel" aria-hidden="true">  
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
       <div class="modal-content shadow"> 
@@ -319,29 +337,6 @@
     </div>    
   </div>
   <!--------------------------------------------------------Remove Department Modal------------------------------------------------------------------------>
-  <!--<div id="departmentRemoveModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="departmentRemoveModal" aria-hidden="true">  
-    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
-      <div class="modal-content shadow"> 
-        
-        <div class="modal-header bg-secondary bg-gradient text-white">
-          <h5 class="removeDepartmentTitle">Remove employee</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="removePersonnelBody">    
-            <p id="deleteConfirmation"></p>
-        </div>
-  
-        <div class="modal-footer">
-          <button type="submit" form="removeForm" class="btn btn-outline-secondary btn-sm deletePerBtn">Remove</button>
-          <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
-        </div>
-    
-      </div>  
-    </div>
-  </div> -->
-
-
-
 
   <div id="cantDeleteDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -400,6 +395,90 @@
         </div> 
       </div>    
     </div>
+
+    <!-------------------------------------------------------Location Add Modal------------------------------------------------------------------------->
+  <div id="locationAddModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="locationAddModal" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">     
+      <div class="modal-content shadow"> 
+        <div class="modal-header bg-secondary bg-gradient text-white">
+            <h5 class="modal-title">Add Location</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">   
+            <form id="addLocationForm">
+              <input type="hidden" id="locationID">
+              <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="locationName" placeholder="Location name" required>
+              <label for="locationName">Location name</label>
+              </div>    
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" form="addLocationForm" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+        </div>
+      </div>
+    </div>   
+  </div>
+  <!-------------------------------------------------------Add AlertModal for Location--------------------------------------------------------------->
+  <div id="addLocationAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+      <div class="modal-content shadow">           
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLocationAlertTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalLocationAlerBody"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div> 
+    </div>    
+  </div>
+  <!--------------------------------------------------------Update Location Modal----------------------------------------------------------------------->
+  <div id="locationUpdateModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="locationUpdateModal" aria-hidden="true">  
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">    
+      <div class="modal-content shadow"> 
+        
+        <div class="modal-header bg-secondary bg-gradient text-white">
+          <h5 class="modal-title">Update location</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">    
+          <form id="updateLocationForm">
+            <input type="hidden" id="locationID">
+  
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="updateLocationName" placeholder="Location name" required>
+              <label for="updateLocationName">Location name</label>
+            </div>
+
+          </form>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" form="updateLocationForm" class="btn btn-outline-secondary btn-sm myBtn">Update</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+        </div>
+      </div>  
+    </div>
+  </div> 
+   <!-------------------------------------------------------Update AlertModal for Location--------------------------------------------------------------->
+   <div id="updateLocationAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+      <div class="modal-content shadow">           
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLocationUpdateTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalLocationUpdateBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div> 
+    </div>    
+  </div>
 
     <script src="JavaScript/jquery-3.6.4.min.js"></script>
     <script src="bootstrap-5.2.3/js/bootstrap.min.js"></script>
