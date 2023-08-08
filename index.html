@@ -337,7 +337,6 @@
     </div>    
   </div>
   <!--------------------------------------------------------Remove Department Modal------------------------------------------------------------------------>
-
   <div id="cantDeleteDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content shadow">
@@ -479,6 +478,64 @@
       </div> 
     </div>    
   </div>
+   <!--------------------------------------------------------Remove Locationt Modal------------------------------------------------------------------------>
+   <div id="cantDeleteLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content shadow">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Cannot remove location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          You cannot remove the entry for <span id="cantDeleteLocationName" class="fw-bold"></span> because it has <span id="ap" class="fw-bold"></span> employees assigned to it.
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+        </div> 
+
+      </div>
+    </div>
+  </div>
+  
+  <div id="areYouSureDeleteLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content shadow"> 
+               
+        <div class="modal-header">
+          <h5 class="modal-title">Remove location?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+          Are you sure that you want to remove the entry for <span id="areYouSureLocationName" class="fw-bold"></span>?
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary myConfirmationLocationBtn" data-bs-dismiss="modal">Yes</button>
+          <button type="button" class="btn btn-outline-secondary myBtn" data-bs-dismiss="modal">No</button>
+        </div>
+        
+      </div> 
+    </div>
+  </div>
+    <!-------------------------------------------------------Remove AlertModal for Department--------------------------------------------------------------->
+    <div id="removeLocationAlertModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"> 
+        <div class="modal-content shadow">           
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalRmoveLocationTitle"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalRemoveLocationBody"></div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div> 
+      </div>    
+    </div>
 
     <script src="JavaScript/jquery-3.6.4.min.js"></script>
     <script src="bootstrap-5.2.3/js/bootstrap.min.js"></script>

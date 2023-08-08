@@ -764,7 +764,7 @@ $(document).ready(function () {
                   deleteDepartmentDetails(departmentId); 
                 
                 } else {
-                    console.log(result.data.personnelCount);
+                  //console.log(result.data.personnelCount);
                   $("#pc").text(result.data.personnelCount);
                   $('#cantDeleteDepartmentModal').modal("show");     
                   $('#cantDeleteDepartmentModal').on('shown.bs.modal', function () {
@@ -935,70 +935,72 @@ $(document).ready(function () {
     function checkLocationDetails () {
         //console.log('hi'); 
         //console.log(locationRemoveName);
-        //$(".deleteDeptBtn").click(function() {
+        //$(".deleteLocationBtn").click(function() {
 
         $.ajax({
-            url: "Php/checkDepartment.php",
+            url: "Php/checkLocation.php",
             type: 'POST',
             dataType: 'json',
             data: {
-              id: departmentId,
+              id: locationId,
             },
             success: function (result) {
                 //console.log(result);       
               if (result.status.code == 200) {
-               //console.log('Value of departmentRemoveName:', departmentRemoveName);
-                if (result.data.personnelCount == 0) {
-                  $("#areYouSureDeptName").text(departmentRemoveName);
-                  $('#areYouSureDeleteDepartmentModal').modal("show");
-                  deleteDepartmentDetails(departmentId); 
+               //console.log('Value of locationRemoveName:', locationRemoveName);
+                if (result.data.departmentCount == 0) {
+                  $("#areYouSureLocationName").text(locationRemoveName);
+                  $('#areYouSureDeleteLocationModal').modal("show");
+                  deleteLocationDetails(locationId); 
                 
                 } else {
-                    console.log(result.data.personnelCount);
-                  $("#pc").text(result.data.personnelCount);
-                  $('#cantDeleteDepartmentModal').modal("show");     
-                  $('#cantDeleteDepartmentModal').on('shown.bs.modal', function () {
-                  $("#cantDeleteDeptName").text(departmentRemoveName);
+                  //console.log(result.data.departmentCount);
+                  $("#ap").text(result.data.departmentCount);
+                  $('#cantDeleteLocationModal').modal("show");     
+                  $('#cantDeleteLocationModal').on('shown.bs.modal', function () {
+                  $("#cantDeleteLocationName").text(locationRemoveName);
                 });       
                 }
                 
               } else {
         
-                $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+                $('#areYouSureDeleteLocationModal .modal-title').replaceWith("Error retrieving data");
+                $('#cantDeleteLocationModal .modal-title').replaceWith("Error retrieving data");
         
               } 
         
             },
             error: function (jqXHR, textStatus, errorThrown) {
-              $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+              $('#areYouSureDeleteLocationModal .modal-title').replaceWith("Error retrieving data");
+              $('#cantDeleteLocationModal .modal-title').replaceWith("Error retrieving data");
             }
         });
         
     }
-    function deleteDepartmentDetails (departmentId) {
-        $('.myConfirmationBtn').on('click', function() {
-        //console.log('Delete Department');
+    function deleteLocationDetails (locationId) {
+        $('.myConfirmationLocationBtn').on('click', function() {
+        //console.log('Delete Location');
         $.ajax({
-            url: "Php/deleteDepartmentByID.php",
+            url: "Php/removeLocationById.php",
             type: 'POST',
             dataType: 'json',
             data: {
-              id: departmentId,
+              id: locationId,
             },
             success: function (result) {
                 //console.log(result);       
               if (result.status.code == 200) {
-                 $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
-                $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + departmentRemoveName + " removed successfully!");
-                $("#removeDepartmentAlertModal").modal("show");
+                 $("#removeLocationAlertModal #modalRmoveLocationTitle").text("Alert");
+                $("#removeLocationAlertModal #modalRemoveLocationBody").text("Location " + locationRemoveName + " removed successfully!");
+                $("#removeLocationAlertModal").modal("show");
               } else {
         
-                $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+                $('#removeLocationAlertModal .modal-title').replaceWith("Error retrieving data");
         
               } 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-            $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+            $('#removeLocationAlertModal .modal-title').replaceWith("Error retrieving data");
             }
         });
           
