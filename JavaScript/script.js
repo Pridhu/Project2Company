@@ -219,10 +219,10 @@ $(document).ready(function () {
             var type = $(this).data("type");
            if (type === "department") {
             departmentId = $(this).attr("data-department-id");
-            console.log('Button on click id');
-            console.log(departmentId);
+            //console.log('Button on click id');
+            //console.log(departmentId);
             departmentRemoveName= $(this).attr("data-department-name");
-            console.log(departmentRemoveName);
+            //console.log(departmentRemoveName);
             checkDepartmentDetails ();
         }
            
@@ -635,40 +635,10 @@ $(document).ready(function () {
     $('#updateDepartmentForm')[0].reset();  
     });
 
-    /*****************************************************************Remove Department***********************************************************************/ 
-    /*$('#departmentRemoveModal').on('show.bs.modal', function (e) {
-
-        $.ajax({
-          url: "Php/checkDepartment.php",
-          type: 'GET',
-          dataType: 'json',
-          data: {
-            id: departmentId
-          },
-          success: function (result) {
-            console.log(result);
-            var resultCode = result.status.code;
-    
-            if (resultCode == 200) {
-              //console.log("Department ID:", result.data[0].id);
-              console.log("Department Name:", result.data[0].name);
-              //var removeDepartmentName = result.data.[0].name;
-              //$('#deleteDeptConfirmation').text("Are you sure you want to delete the personnel details of " + removefirstName + " " + removelastName + "?");
-              //$("cantDeleteDeptName").val( result.data[0].name);
-              //deleteDepartmentDetails();
-            } 
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            $('#departmentRemoveModal .modal-title').text("Error retrieving data");
-          }
-        });
-    
-      });*/
-    
+    /*****************************************************************Remove Department***********************************************************************/  
     function checkDepartmentDetails () {
-        console.log('hi');
-        
-        console.log(departmentRemoveName);
+        //console.log('hi'); 
+        //console.log(departmentRemoveName);
         //$(".deleteDeptBtn").click(function() {
 
         $.ajax({
@@ -679,11 +649,11 @@ $(document).ready(function () {
               id: departmentId,
             },
             success: function (result) {
-                console.log(result);       
+                //console.log(result);       
               if (result.status.code == 200) {
                //console.log('Value of departmentRemoveName:', departmentRemoveName);
                 if (result.data.personnelCount == 0) {
-                  //$("#areYouSureDeptName").val(departmentRemoveName);
+                  $("#areYouSureDeptName").text(departmentRemoveName);
                   $('#areYouSureDeleteDepartmentModal').modal("show");
                   deleteDepartmentDetails(departmentId); 
                 
@@ -692,9 +662,8 @@ $(document).ready(function () {
                   $("#pc").text(result.data.personnelCount);
                   $('#cantDeleteDepartmentModal').modal("show");     
                   $('#cantDeleteDepartmentModal').on('shown.bs.modal', function () {
-                   // $("#cantDeleteDeptName").val(departmentRemoveName);
-                });     
-                   
+                  $("#cantDeleteDeptName").text(departmentRemoveName);
+                });       
                 }
                 
               } else {
@@ -711,7 +680,8 @@ $(document).ready(function () {
         
     }
     function deleteDepartmentDetails (departmentId) {
-        console.log('Delete Department');
+        $('.myConfirmationBtn').on('click', function() {
+        //console.log('Delete Department');
         $.ajax({
             url: "Php/deleteDepartmentByID.php",
             type: 'POST',
@@ -720,7 +690,7 @@ $(document).ready(function () {
               id: departmentId,
             },
             success: function (result) {
-                console.log(result);       
+                //console.log(result);       
               if (result.status.code == 200) {
                  $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
                 $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + departmentRemoveName + " removed successfully!");
@@ -736,7 +706,10 @@ $(document).ready(function () {
             }
         });
           
-      }
+      });
+    }
+
+
 
 });
 
