@@ -724,11 +724,11 @@ $(document).ready(function () {
                     $("#updateDepartmentAlertModal").modal("show");
                     $("#departmentUpdateModal").modal('hide');
                 } else {
-                    $('#updateDepartmentAlertModal #modalUpdateTitle').text("Error retrieving data");
+                    $('#updateDepartmentAlertModal #modalDptUpdateTitle').text("Error retrieving data");
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error updating personnel data:", errorThrown);
+                console.error("Error updating department data:", errorThrown);
             }
         });
     });
@@ -816,49 +816,40 @@ $(document).ready(function () {
     }
 
     /*****************************************************************Add Location***********************************************************************/ 
-    $('#locationAddModal').on('show.bs.modal', function (e) {
-    
-        $("#addLocationForm").submit(function (event) {
+    $("#addLocationForm").submit(function (event) {
         event.preventDefault(); 
     
-            var locationName = $("#locationName").val();
-            //var locationId = $("#addLocationDropdown").val();
-            //console.log(locationName);
-            //console.log(locationId);
+        var locationName = $("#locationName").val();
     
         $.ajax({
             url: "Php/insertLocation.php",
             type: "POST",
             data: {
-            name: locationName,   // Include the location name in the data payload
+                name: locationName,
             },
             success: function (response) {
                 if (response.status.code === "200") {
-                $('#addLocationForm')[0].reset();
-                //console.log(response);
-                fetchLocationData();
-                } 
-            
-            $("#addLocationAlertModal #modalLocationAlertTitle").text("Alert");
-            $("#addLocationAlertModal #modalLocationAlerBody").text("Location " + locationName + " added successfully!");
-            $("#addLocationAlertModal").modal("show");
-            $("#locationAddModal").modal("hide");
+                    $('#addLocationForm')[0].reset();
+                    fetchLocationData();
+                }  
+                $("#addLocationAlertModal #modalLocationAlertTitle").text("Alert");
+                $("#addLocationAlertModal #modalLocationAlerBody").text("Location " + locationName + " added successfully!");
+                $("#addLocationAlertModal").modal("show");
+                $("#locationAddModal").modal("hide");
             },
             error: function (xhr, status, error) {
                 alert("An error occurred while processing the request.");
             }
-            });
         });
-    
-        $('#locationAddModal').on('shown.bs.modal', function () {
-            $('#locationName').focus();
-        });
-    
-        $('#locationAddModal').on('hidden.bs.modal', function () {
-            $('#addLocationForm')[0].reset();
-        });  
     });
-         
+    
+    $('#locationAddModal').on('show.bs.modal', function () {
+        $('#locationName').focus();
+    });
+    
+    $('#locationAddModal').on('hidden.bs.modal', function () {
+        $('#addLocationForm')[0].reset();
+    });       
     /**********************************************************Update Location Modal****************************************************************************************/
     $('#locationUpdateModal').on('show.bs.modal', function (e) {
         //var locationId = $(this).data("location-id");
@@ -875,21 +866,12 @@ $(document).ready(function () {
                 var resultCode = result.status.code;
 
                 if (resultCode == 200) {
-                    //console.log(result);
-                   //console.log("Location Name:", result.data[0].name);
+                    console.log(result);
+                    console.log("Location Name:", result.data[0].name);
+                    console.log("Location Id:", result.data[0].id);
                     $('#locationID').val(result.data[0].id);
                    $('#updateLocationName').val(result.data[0].name);
-                
-                    /*$('#updateLocationDropdown').empty();
-                    $.each(result.data.location, function () {
-                        $('#updateLocationDropdown').append($("<option>", {
-                            value: this.id,
-                            text: this.name
-                        }));
-                    });
-
-                    $('#updateLocationDropdown').val(result.data[0].locationID);*/
-
+    
                     // Show the update modal after data is fetched and populated
                     $("#locationUpdateModal").modal('show');
                 } else {
@@ -903,8 +885,8 @@ $(document).ready(function () {
         });
 
     });
-    /*****************************************************Update function*********************************************************************************** */
-    /*$('#updateLocationForm').on("submit", function (e) {
+    /************************************************************Update function*********************************************************************************** */
+    $('#updateLocationForm').on("submit", function (e) {
         e.preventDefault();
         // Get the updated values from the form fields
         var locationId = $('#locationID').val();
@@ -916,40 +898,111 @@ $(document).ready(function () {
 
         // AJAX call to update the personnel data
         $.ajax({
-            url: "Php/updateDepartment.php",
+            url: "Php/updateLocation.php",
             type: 'POST', 
             dataType: 'json',
             data: {
-                id: departmentId,
-                name: updatedDepartmentName,
-                locationID: updatedLocationID
+                id: locationId,
+                name: updatedLocationName
             },
             success: function (result) {
                 var resultCode = result.status.code;
                 //console.log(result);//
                 
                 if (resultCode == 200) {
-                    $("#updateDepartmentAlertModal #modalDptUpdateTitle").text("Alert");
-                    $("#updateDepartmentAlertModal #modalDptUpdateBody").text("Department " + updatedDepartmentName + " updated successfully!");
-                    $("#updateDepartmentAlertModal").modal("show");
-                    $("#departmentUpdateModal").modal('hide');
+                    $("#updateLocationAlertModal #modalLocationUpdateTitle").text("Alert");
+                    $("#updateLocationAlertModal #modalLocationUpdateBody").text("Location " + updatedLocationName + " updated successfully!");
+                    $("#updateLocationAlertModal").modal("show");
+                    $("#locationUpdateModal").modal('hide');
                 } else {
-                    $('#updateDepartmentAlertModal #modalUpdateTitle').text("Error retrieving data");
+                    $('#updateLocationAlertModal #modalLocationUpdateTitle').text("Error retrieving data");
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error updating personnel data:", errorThrown);
+                console.error("Error updating location data:", errorThrown);
             }
         });
     });
 
-    $('#departmentUpdateModal').on('shown.bs.modal', function () {
-    $('#updateDepartmentForm').focus(); 
+    $('#locationUpdateModal').on('shown.bs.modal', function () {
+    $('#updateLocationForm').focus(); 
     });
 
-    $('#departmentUpdateModal').on('hidden.bs.modal', function () {  
-    $('#updateDepartmentForm')[0].reset();  
-    });*/
+    $('#locationUpdateModal').on('hidden.bs.modal', function () {  
+    $('#updateLocationForm')[0].reset();  
+    });
+    /*****************************************************************Remove Location***********************************************************************/  
+    function checkLocationDetails () {
+        //console.log('hi'); 
+        //console.log(locationRemoveName);
+        //$(".deleteDeptBtn").click(function() {
 
+        $.ajax({
+            url: "Php/checkDepartment.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              id: departmentId,
+            },
+            success: function (result) {
+                //console.log(result);       
+              if (result.status.code == 200) {
+               //console.log('Value of departmentRemoveName:', departmentRemoveName);
+                if (result.data.personnelCount == 0) {
+                  $("#areYouSureDeptName").text(departmentRemoveName);
+                  $('#areYouSureDeleteDepartmentModal').modal("show");
+                  deleteDepartmentDetails(departmentId); 
+                
+                } else {
+                    console.log(result.data.personnelCount);
+                  $("#pc").text(result.data.personnelCount);
+                  $('#cantDeleteDepartmentModal').modal("show");     
+                  $('#cantDeleteDepartmentModal').on('shown.bs.modal', function () {
+                  $("#cantDeleteDeptName").text(departmentRemoveName);
+                });       
+                }
+                
+              } else {
+        
+                $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+        
+              } 
+        
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+            }
+        });
+        
+    }
+    function deleteDepartmentDetails (departmentId) {
+        $('.myConfirmationBtn').on('click', function() {
+        //console.log('Delete Department');
+        $.ajax({
+            url: "Php/deleteDepartmentByID.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+              id: departmentId,
+            },
+            success: function (result) {
+                //console.log(result);       
+              if (result.status.code == 200) {
+                 $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
+                $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + departmentRemoveName + " removed successfully!");
+                $("#removeDepartmentAlertModal").modal("show");
+              } else {
+        
+                $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+        
+              } 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
+            }
+        });
+          
+      });
+    }
 });
 
