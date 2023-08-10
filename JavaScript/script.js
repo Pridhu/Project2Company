@@ -397,7 +397,7 @@ $(document).ready(function () {
           } 
           // Set the employee details in the second modal's title
         $("#addAlertModal #modalTitle").text("Alert");
-        $("#addAlertModal #modalBody").text("Employee details of " + formData.firstName + ", " + formData.lastName + " added successfully!");
+        $("#addAlertModal #modalBody").html("Employee details of <strong>" + formData.firstName + "</strong>, <strong>" + formData.lastName + "</strong> added successfully!");
 
         $("#addAlertModal").modal("show");
         $("#personnelAddModal").modal("hide");
@@ -494,7 +494,7 @@ $(document).ready(function () {
                 
                 if (resultCode == 200) {
                     $("#updateAlertModal #modalUpdateTitle").text("Alert");
-                    $("#updateAlertModal #modalUpdateBody").text("Employee details of " + updatedFirstName + ", " + updatedLastName + " updated successfully!");
+                    $("#updateAlertModal #modalUpdateBody").html("Employee details of <strong>" + updatedFirstName + "</strong>, <strong>" + updatedLastName + "</strong> updated successfully!");
                     $("#updateAlertModal").modal("show");
                     $("#personnelUpdateModal").modal('hide');
                 } else {
@@ -535,7 +535,7 @@ $(document).ready(function () {
            
             var removefirstName = result.data.personnel[0].firstName;
             var removelastName = result.data.personnel[0].lastName;
-            $('#deleteConfirmation').text("Are you sure you want to delete the personnel details of " + removefirstName + " " + removelastName + "?");
+            $('#deleteConfirmation').html("Are you sure you want to delete the personnel details of <strong>" + removefirstName + "</strong>, <strong>" + removelastName + "</strong>?");
             deletePersonnelDetails(removefirstName,removelastName);
           } else {
             $('#personnelRemoveModal .modal-title').text("Error retrieving data");
@@ -563,7 +563,7 @@ $(document).ready(function () {
                     //console.log(result);//
                     if (resultCode == 200) {
                     $("#removeAlertModal #modalRmoveTitle").text("Alert");
-                    $("#removeAlertModal #modalRemoveBody").text("Employee details of " + removefirstName + ", " + removelastName + " removed successfully!");
+                    $("#removeAlertModal #modalRemoveBody").html("Employee details of <strong>" + removefirstName + "</strong>, <strong>" + removelastName + "</strong> removed successfully!");
                     $("#removeAlertModal").modal("show");
                     $('#personnelRemoveModal').modal('hide');
                     }else {
@@ -629,7 +629,7 @@ $(document).ready(function () {
             } 
         
         $("#addDepartmentAlertModal #modalDptAlertTitle").text("Alert");
-        $("#addDepartmentAlertModal #modalDptAlerBody").text("Department " + departmentName + " added successfully!");
+        $("#addDepartmentAlertModal #modalDptAlerBody").html("Department <strong>" + departmentName + "</strong> added successfully!");
         $("#addDepartmentAlertModal").modal("show");
         $("#departmentAddModal").modal("hide");
         },
@@ -720,7 +720,7 @@ $(document).ready(function () {
                 
                 if (resultCode == 200) {
                     $("#updateDepartmentAlertModal #modalDptUpdateTitle").text("Alert");
-                    $("#updateDepartmentAlertModal #modalDptUpdateBody").text("Department " + updatedDepartmentName + " updated successfully!");
+                    $("#updateDepartmentAlertModal #modalDptUpdateBody").html("Department <strong>" + updatedDepartmentName + "</strong> updated successfully!");
                     $("#updateDepartmentAlertModal").modal("show");
                     $("#departmentUpdateModal").modal('hide');
                 } else {
@@ -799,7 +799,7 @@ $(document).ready(function () {
                 //console.log(result);       
               if (result.status.code == 200) {
                  $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
-                $("#removeDepartmentAlertModal #modalRemoveDeptBody").text("Department " + departmentRemoveName + " removed successfully!");
+                $("#removeDepartmentAlertModal #modalRemoveDeptBody").html("Department <strong>" + departmentRemoveName + "</strong> removed successfully!");
                 $("#removeDepartmentAlertModal").modal("show");
               } else {
         
@@ -833,7 +833,7 @@ $(document).ready(function () {
                     fetchLocationData();
                 }  
                 $("#addLocationAlertModal #modalLocationAlertTitle").text("Alert");
-                $("#addLocationAlertModal #modalLocationAlerBody").text("Location " + locationName + " added successfully!");
+                $("#addLocationAlertModal #modalLocationAlerBody").html("Location <strong>" + locationName + "</strong> added successfully!");
                 $("#addLocationAlertModal").modal("show");
                 $("#locationAddModal").modal("hide");
             },
@@ -911,7 +911,7 @@ $(document).ready(function () {
                 
                 if (resultCode == 200) {
                     $("#updateLocationAlertModal #modalLocationUpdateTitle").text("Alert");
-                    $("#updateLocationAlertModal #modalLocationUpdateBody").text("Location " + updatedLocationName + " updated successfully!");
+                    $("#updateLocationAlertModal #modalLocationUpdateBody").html("Location <strong>" + updatedLocationName + "</strong> updated successfully!");
                     $("#updateLocationAlertModal").modal("show");
                     $("#locationUpdateModal").modal('hide');
                 } else {
@@ -991,7 +991,7 @@ $(document).ready(function () {
                 //console.log(result);       
               if (result.status.code == 200) {
                  $("#removeLocationAlertModal #modalRmoveLocationTitle").text("Alert");
-                $("#removeLocationAlertModal #modalRemoveLocationBody").text("Location " + locationRemoveName + " removed successfully!");
+                $("#removeLocationAlertModal #modalRemoveLocationBody").html("Location <strong>" + locationRemoveName + "</strong> removed successfully!");
                 $("#removeLocationAlertModal").modal("show");
               } else {
         
