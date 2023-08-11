@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var searchQuery = "";
     var originalData;
-    var filteredData = [];
     var employeeId;
     var departmentId;
     var departmentRemoveName;
@@ -84,10 +83,10 @@ $(document).ready(function () {
         
         var rowContainer = $("#cardPersonnelRow");
         // Initialize a counter to keep track of cards in the current row
-        var cardCounter = 0;
+        //var cardCounter = 0;
         var cardsPerRow = 4;
         var numRows = Math.ceil(data.length / cardsPerRow);
-        console.log(numRows);
+        //console.log(numRows);
         for (var i = 0; i < numRows; i++) {
             var row = $("<div class='row text-center'></div>");
             rowContainer.append(row);
@@ -143,7 +142,7 @@ $(document).ready(function () {
     }
     
     /********************************************************Department*********************************************************************************/
-    function fetchDepartmentData(searchQuery = "") {
+    function fetchAllDepartmentData() {
         $.ajax({
             url: "Php/getAllDepartments.php",
             type: "GET",
@@ -176,7 +175,39 @@ $(document).ready(function () {
     }
 
     // On page load fetch the initial data
-    fetchDepartmentData();
+    fetchAllDepartmentData();
+
+    function fetchDepartmentData(searchQuery = "") {
+        $.ajax({
+            url: "Php/getAllDepartments.php",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                if (response.status.code === "200") {
+                    var departmentData = response.data;
+                    //var departmentName = response.data[0].name;
+                    //console.log(departmentData);
+                    //console.log(departmentName);
+        
+                    // If a search query is provided, filter the data
+                    if (searchQuery.trim() !== "") {
+                        var filteredDepartment = departmentData.filter(function (department) {
+                            var departmentName = department.name.toLowerCase();
+                            return departmentName.includes(searchQuery);
+                        });
+                        generateDepartmentCards(filteredDepartment);
+                    } else {
+                        generateDepartmentCards(departmentData);
+                    }
+                } else {
+                    console.error("Error: Unable to fetch data from PHP.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+            }
+        });
+    }
 
     /*******************************************************SearchBarDepartment***********************************************************************/
     var searchDepartmentInput = $("#searchDepartmentInput");
@@ -255,40 +286,72 @@ $(document).ready(function () {
     }
 
   /***********************************************************Location*********************************************************************************/ 
-    function fetchLocationData(searchQuery = "") {
-        $.ajax({
-            url: "Php/getAllLocations.php",
-            type: "GET",
-            dataType: "json",
-            success: function (response) {
-                if (response.status.code === "200") {
-                    var locationData = response.data;
-                    //var locationName = response.data[0].name;
-                    //console.log(locationData);
-                    //console.log(locationName);
-        
-                    // Search query to filter the data
-                    if (searchQuery.trim() !== "") {
-                        var filteredLocation = locationData.filter(function (location) {
-                            var locationName = location.name.toLowerCase();
-                            return locationName.includes(searchQuery);
-                        });
-                        generateLocationCards(filteredLocation);
-                    } else {
-                        generateLocationCards(locationData);
-                    }
+  function fetchAllLocationData() {
+    $.ajax({
+        url: "Php/getAllLocations.php",
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (response.status.code === "200") {
+                var locationData = response.data;
+                //var locationName = response.data[0].name;
+                //console.log(locationData);
+                //console.log(locationName);
+    
+                // Search query to filter the data
+                if (searchQuery.trim() !== "") {
+                    var filteredLocation = locationData.filter(function (location) {
+                        var locationName = location.name.toLowerCase();
+                        return locationName.includes(searchQuery);
+                    });
+                    generateLocationCards(filteredLocation);
                 } else {
-                    console.error("Error: Unable to fetch data from PHP.");
+                    generateLocationCards(locationData);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", status, error);
+            } else {
+                console.error("Error: Unable to fetch data from PHP.");
             }
-        });
-    }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+        }
+    });
+}
 
     // On page load fetch the initial data
-    fetchLocationData();
+    fetchAllLocationData();  
+
+    function fetchLocationData(searchQuery = "") {
+            $.ajax({
+                url: "Php/getAllLocations.php",
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    if (response.status.code === "200") {
+                        var locationData = response.data;
+                        //var locationName = response.data[0].name;
+                        //console.log(locationData);
+                        //console.log(locationName);
+            
+                        // Search query to filter the data
+                        if (searchQuery.trim() !== "") {
+                            var filteredLocation = locationData.filter(function (location) {
+                                var locationName = location.name.toLowerCase();
+                                return locationName.includes(searchQuery);
+                            });
+                            generateLocationCards(filteredLocation);
+                        } else {
+                            generateLocationCards(locationData);
+                        }
+                    } else {
+                        console.error("Error: Unable to fetch data from PHP.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                }
+            });
+        }
 
     /*******************************************************SearchBarLocation***********************************************************************/
     var searchLocationInput = $("#searchLocationInput");
@@ -366,8 +429,8 @@ $(document).ready(function () {
         });
     }
 
-  /****************************************************************Personnel Add Modal*****************************************************************/
-    $('#personnelAddModal').on('show.bs.modal', function (e) {
+    /****************************************************************Personnel Add Modal*****************************************************************/
+    $('#personnelAddModal').on('show.bs.modal', function () {
         $.ajax({
             url: "Php/getPersonnelByID.php",
             type: 'GET',
@@ -418,8 +481,8 @@ $(document).ready(function () {
             success: function (response) {
             if (response.status.code === "200") {
                 $('#addForm')[0].reset();
-                console.log(response);
-                fetchPersonnelData();
+                //console.log(response);
+                fetchAllPersonnelData();
             } 
             // Set the employee details in the second modal's title
             $("#addAlertModal #modalTitle").text("Alert");
@@ -443,7 +506,7 @@ $(document).ready(function () {
     });
 
   /**********************************************************Update Personnel Modal****************************************************************************************/
-    $('#personnelUpdateModal').on('show.bs.modal', function (e) {
+    $('#personnelUpdateModal').on('show.bs.modal', function () {
         /*console.log("Employee ID:", employeeId);*/
         $.ajax({
             url: "Php/getPersonnelByID.php",
@@ -534,10 +597,9 @@ $(document).ready(function () {
                         updatedPerson.email = updatedEmail;
                         updatedPerson.departmentID = updatedDepartmentID;
                     }
-                    console.log(updatedPerson);
-                    
+                    //console.log(updatedPerson);
                     // Update the UI dynamically
-                    console.log(searchQuery);
+                    //console.log(searchQuery);
                     rowContainer.empty();
                     fetchPersonnelData(searchQuery);
 
@@ -560,41 +622,40 @@ $(document).ready(function () {
     });
 
     /*****************************************************************Remove Personnel***********************************************************************/ 
-    $('#personnelRemoveModal').on('show.bs.modal', function (e) {
-
-      $.ajax({
-        url: "Php/getPersonnelByID.php",
-        type: 'GET',
-        dataType: 'json',
-        data: {
-          id: employeeId
-        },
-        success: function (result) {
-          console.log(result);
-          var resultCode = result.status.code;
-  
-          if (resultCode == 200) {
-            //console.log("Employee ID:", result.data.personnel[0].id);//
-            //console.log("First Name:", result.data.personnel[0].firstName);//
-           
-            var removefirstName = result.data.personnel[0].firstName;
-            var removelastName = result.data.personnel[0].lastName;
-            $('#deleteConfirmation').html("Are you sure you want to delete the personnel details of <strong>" + removefirstName + "</strong>, <strong>" + removelastName + "</strong>?");
-            deletePersonnelDetails(removefirstName,removelastName);
-          } else {
+    $('#personnelRemoveModal').on('show.bs.modal', function () {
+        $.ajax({
+            url: "Php/getPersonnelByID.php",
+            type: 'GET',
+            dataType: 'json',
+            data: {
+            id: employeeId
+            },
+            success: function (result) {
+            //console.log(result);
+            var resultCode = result.status.code;
+    
+            if (resultCode == 200) {
+                //console.log("Employee ID:", result.data.personnel[0].id);//
+                //console.log("First Name:", result.data.personnel[0].firstName);//
+            
+                var removefirstName = result.data.personnel[0].firstName;
+                var removelastName = result.data.personnel[0].lastName;
+                $('#deleteConfirmation').html("Are you sure you want to delete the personnel details of <strong>" + removefirstName + "</strong>, <strong>" + removelastName + "</strong>?");
+                deletePersonnelDetails(removefirstName,removelastName);
+            } else {
+                $('#personnelRemoveModal .modal-title').text("Error retrieving data");
+            }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
             $('#personnelRemoveModal .modal-title').text("Error retrieving data");
-          }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          $('#personnelRemoveModal .modal-title').text("Error retrieving data");
-        }
-      });
-  
-    });
+            }
+        });
+    
+        });
   
     function deletePersonnelDetails (removefirstName,removelastName) {
         $(".deletePerBtn").click(function() {
-            console.log('Remove Function');
+            //console.log('Remove Function');
             $.ajax({
                 url: "Php/removePersonnelById.php",
                 type: 'POST',
@@ -671,7 +732,7 @@ $(document).ready(function () {
             if (response.status.code === "200") {
             $('#addDepartmentForm')[0].reset();
             //console.log(response);
-            fetchDepartmentData();
+            fetchAllDepartmentData();
             } 
         
         $("#addDepartmentAlertModal #modalDptAlertTitle").text("Alert");
@@ -694,7 +755,7 @@ $(document).ready(function () {
     });
 
     /**********************************************************Update Department Modal****************************************************************************************/
-    $('#departmentUpdateModal').on('show.bs.modal', function (e) {
+    $('#departmentUpdateModal').on('show.bs.modal', function () {
         //var departmentId = $(this).data("department-id");
         //console.log("Department ID:", departmentId);
         $.ajax({
@@ -769,6 +830,8 @@ $(document).ready(function () {
                     $("#updateDepartmentAlertModal #modalDptUpdateBody").html("Department <strong>" + updatedDepartmentName + "</strong> updated successfully!");
                     $("#updateDepartmentAlertModal").modal("show");
                     $("#departmentUpdateModal").modal('hide');
+                    rowContainer.empty();
+                    fetchDepartmentData(searchQuery);
                 } else {
                     $('#updateDepartmentAlertModal #modalDptUpdateTitle').text("Error retrieving data");
                 }
@@ -847,6 +910,8 @@ $(document).ready(function () {
                  $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
                 $("#removeDepartmentAlertModal #modalRemoveDeptBody").html("Department <strong>" + departmentRemoveName + "</strong> removed successfully!");
                 $("#removeDepartmentAlertModal").modal("show");
+                rowContainer.empty();
+                fetchDepartmentData(searchQuery);
               } else {
         
                 $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
@@ -876,7 +941,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.status.code === "200") {
                     $('#addLocationForm')[0].reset();
-                    fetchLocationData();
+                    fetchAllLocationData();  
                 }  
                 $("#addLocationAlertModal #modalLocationAlertTitle").text("Alert");
                 $("#addLocationAlertModal #modalLocationAlerBody").html("Location <strong>" + locationName + "</strong> added successfully!");
@@ -897,7 +962,7 @@ $(document).ready(function () {
         $('#addLocationForm')[0].reset();
     });       
     /**********************************************************Update Location Modal****************************************************************************************/
-    $('#locationUpdateModal').on('show.bs.modal', function (e) {
+    $('#locationUpdateModal').on('show.bs.modal', function () {
         //var locationId = $(this).data("location-id");
         //console.log("Location ID:", locationId);
         $.ajax({
@@ -960,6 +1025,8 @@ $(document).ready(function () {
                     $("#updateLocationAlertModal #modalLocationUpdateBody").html("Location <strong>" + updatedLocationName + "</strong> updated successfully!");
                     $("#updateLocationAlertModal").modal("show");
                     $("#locationUpdateModal").modal('hide');
+                    rowContainer.empty();
+                    fetchLocationData(searchQuery);
                 } else {
                     $('#updateLocationAlertModal #modalLocationUpdateTitle').text("Error retrieving data");
                 }
@@ -1039,6 +1106,9 @@ $(document).ready(function () {
                  $("#removeLocationAlertModal #modalRmoveLocationTitle").text("Alert");
                 $("#removeLocationAlertModal #modalRemoveLocationBody").html("Location <strong>" + locationRemoveName + "</strong> removed successfully!");
                 $("#removeLocationAlertModal").modal("show");
+                rowContainer.empty();
+                fetchLocationData(searchQuery);
+
               } else {
         
                 $('#removeLocationAlertModal .modal-title').replaceWith("Error retrieving data");
