@@ -19,25 +19,6 @@ $(document).ready(function () {
                     originalData = response.data;
                     /*console.log(originalData);*/
                     generateCards(originalData);
-                    // If a search query is provided, filter the data
-                   /* if (searchQuery.trim() !== "") {
-                        var filteredData = originalData.filter(function (person) {
-                            var fullName = (person.firstName + " " + person.lastName).toLowerCase();
-                            var department = person.department.toLowerCase();
-                            var location = person.location.toLowerCase();
-                            var email = person.email.toLowerCase();
-                            return (
-                                fullName.includes(searchQuery) ||
-                                department.includes(searchQuery) ||
-                                location.includes(searchQuery) ||
-                                email.includes(searchQuery)
-                            );
-                        });
-                        generateCards(filteredData);
-                    } else {
-                        filteredData = originalData;   ///added
-                        generateCards(originalData);
-                    }*/
                 } else {
                     console.error("Error: Unable to fetch data from PHP.");
                 }
@@ -48,9 +29,7 @@ $(document).ready(function () {
         });
     }
 
-
     // On page load fetch the initial data
-    //fetchPersonnelData();
     fetchAllPersonnelData()
 
     function fetchPersonnelData(searchQuery) {
@@ -92,9 +71,6 @@ $(document).ready(function () {
         });
     }
 
-    // On page load fetch the initial data
-    //fetchPersonnelData();
-
     /*******************************************************SearchBarPersonnel***********************************************************************/
     var searchPersonnelInput = $("#searchPersonnelInput");
     searchPersonnelInput.on("input", function () {
@@ -107,7 +83,6 @@ $(document).ready(function () {
     function generateCards(data) {
         
         var rowContainer = $("#cardPersonnelRow");
-        //rowContainer.empty();
         // Initialize a counter to keep track of cards in the current row
         var cardCounter = 0;
         var cardsPerRow = 4;
@@ -563,8 +538,6 @@ $(document).ready(function () {
                     
                     // Update the UI dynamically
                     console.log(searchQuery);
-                    //generateCards(searchQuery);
-                    //generateCards();
                     rowContainer.empty();
                     fetchPersonnelData(searchQuery);
 
@@ -637,6 +610,8 @@ $(document).ready(function () {
                     $("#removeAlertModal #modalRemoveBody").html("Employee details of <strong>" + removefirstName + "</strong>, <strong>" + removelastName + "</strong> removed successfully!");
                     $("#removeAlertModal").modal("show");
                     $('#personnelRemoveModal').modal('hide');
+                    rowContainer.empty();
+                    fetchPersonnelData(searchQuery)
                     }else {
                         $("#removeAlertModal #modalRmoveTitle").text("Error retrieving data");
                     }
