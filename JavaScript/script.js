@@ -212,7 +212,7 @@ $(document).ready(function () {
         fetchDepartmentData(searchDepartmentQuery);
     });
 
-    function  generateDepartmentCards(data) {
+    function generateDepartmentCards(data) {
         rowDepartmentContainer = $("#cardDepartmentRow");
         // Initialize a counter to keep track of cards in the current row
         //var cardCounter = 0;
@@ -288,20 +288,10 @@ $(document).ready(function () {
         success: function (response) {
             if (response.status.code === "200") {
                 var locationData = response.data;
-                //var locationName = response.data[0].name;
-                //console.log(locationData);
-                //console.log(locationName);
-    
-                // Search query to filter the data
-                if (searchQuery.trim() !== "") {
-                    var filteredLocation = locationData.filter(function (location) {
-                        var locationName = location.name.toLowerCase();
-                        return locationName.includes(searchQuery);
-                    });
-                    generateLocationCards(filteredLocation);
-                } else {
-                    generateLocationCards(locationData);
-                }
+                var locationName = response.data[0].name;
+                console.log(locationData);
+                console.log(locationName);
+                generateLocationCards(locationData);
             } else {
                 console.error("Error: Unable to fetch data from PHP.");
             }
@@ -315,7 +305,7 @@ $(document).ready(function () {
     // On page load fetch the initial data
     fetchAllLocationData();  
 
-    function fetchLocationData(searchQuery = "") {
+    function fetchLocationData(searchLocationQuery) {
             $.ajax({
                 url: "Php/getAllLocations.php",
                 type: "GET",
@@ -328,10 +318,10 @@ $(document).ready(function () {
                         //console.log(locationName);
             
                         // Search query to filter the data
-                        if (searchQuery.trim() !== "") {
+                        if (searchLocationQuery.trim() !== "") {
                             var filteredLocation = locationData.filter(function (location) {
                                 var locationName = location.name.toLowerCase();
-                                return locationName.includes(searchQuery);
+                                return locationName.includes(searchLocationQuery);
                             });
                             generateLocationCards(filteredLocation);
                         } else {
@@ -350,14 +340,14 @@ $(document).ready(function () {
     /*******************************************************SearchBarLocation***********************************************************************/
     var searchLocationInput = $("#searchLocationInput");
     searchLocationInput.on("input", function () {
-        var searchQuery = searchLocationInput.val().trim().toLowerCase();
-        var rowContainer = $("#cardLocationRow");
-        rowContainer.empty();
-        fetchLocationData(searchQuery);
+        searchLocationQuery = searchLocationInput.val().trim().toLowerCase();
+        rowLocationContainer = $("#cardLocationRow");
+        rowLocationContainer.empty();
+        fetchLocationData(searchLocationQuery);
     });
 
-    function  generateLocationCards(data) {
-        var rowContainer = $("#cardLocationRow");
+    function generateLocationCards(data) {
+        rowLocationContainer = $("#cardLocationRow");
         // Initialize a counter to keep track of cards in the current row
         //var cardCounter = 0;
         var cardsPerRow = 2;
@@ -365,7 +355,7 @@ $(document).ready(function () {
 
         for (var i = 0; i < numRows; i++) {
             var row = $("<div class='row text-center justify-content-center'></div>");
-            rowContainer.append(row);
+            rowLocationContainer.append(row);
 
             for (var j = 0; j < cardsPerRow; j++) {
                 var dataIndex = i * cardsPerRow + j;
@@ -375,8 +365,8 @@ $(document).ready(function () {
                     //console.log(location);
                     var locationName = location.name;
                     //console.log(locationName);
-                    //var locationName = data[dataIndex].name;
-                    //console.log(locationName);
+                    var locationName = data[dataIndex].name;
+                    console.log(locationName);
                     //var locationId = data[dataIndex].id;
                     //console.log(locationId);
                     var locationCard =
@@ -1017,8 +1007,8 @@ $(document).ready(function () {
                     $("#updateLocationAlertModal #modalLocationUpdateBody").html("Location <strong>" + updatedLocationName + "</strong> updated successfully!");
                     $("#updateLocationAlertModal").modal("show");
                     $("#locationUpdateModal").modal('hide');
-                    rowContainer.empty();
-                    fetchLocationData(searchQuery);
+                    rowLocationContainer.empty();
+                    fetchLocationData(searchLocationQuery);
                 } else {
                     $('#updateLocationAlertModal #modalLocationUpdateTitle').text("Error retrieving data");
                 }
@@ -1098,8 +1088,8 @@ $(document).ready(function () {
                  $("#removeLocationAlertModal #modalRmoveLocationTitle").text("Alert");
                 $("#removeLocationAlertModal #modalRemoveLocationBody").html("Location <strong>" + locationRemoveName + "</strong> removed successfully!");
                 $("#removeLocationAlertModal").modal("show");
-                rowContainer.empty();
-                fetchLocationData(searchQuery);
+                rowLocationContainer.empty();
+                fetchLocationData(searchLocationQuery);
 
               } else {
         
