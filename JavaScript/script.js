@@ -20,7 +20,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.status.code === "200") {
                     originalData = response.data;
-                    /*console.log(originalData);*/
+                    //console.log(originalData);
                     generateCards(originalData);
                 } else {
                     console.error("Error: Unable to fetch data from PHP.");
@@ -43,7 +43,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.status.code === "200") {
                     originalData = response.data;
-                    /*console.log(originalData);*/
+                    //console.log(originalData);
         
                     // If a search query is provided, filter the data
                     if (searchQuery.trim() !== "") {
@@ -129,7 +129,7 @@ $(document).ready(function () {
         $(".btn-update").on("click", function() {
             var type = $(this).data("type");
             employeeId = $(this).attr("data-id");
-            /*console.log(employeeId);*/
+            //console.log(employeeId);
             if (type === "personnel") {
                 
                 $("#personnelUpdateModal").modal('show');
@@ -259,7 +259,7 @@ $(document).ready(function () {
         $(".btn-update").on("click", function() {
             var type = $(this).data("type");
             departmentId = $(this).attr("data-department-id");
-            console.log(departmentId);
+            //console.log(departmentId);
             if (type === "department") {
             $("#departmentUpdateModal").modal('show');
             }
@@ -288,9 +288,9 @@ $(document).ready(function () {
         success: function (response) {
             if (response.status.code === "200") {
                 var locationData = response.data;
-                var locationName = response.data[0].name;
-                console.log(locationData);
-                console.log(locationName);
+                //var locationName = response.data[0].name;
+                //console.log(locationData);
+                //console.log(locationName);
                 generateLocationCards(locationData);
             } else {
                 console.error("Error: Unable to fetch data from PHP.");
@@ -363,10 +363,10 @@ $(document).ready(function () {
                 if (dataIndex < data.length) {
                     var location = data[dataIndex];
                     //console.log(location);
-                    var locationName = location.name;
+                    //var locationName = location.name;
                     //console.log(locationName);
                     var locationName = data[dataIndex].name;
-                    console.log(locationName);
+                    //console.log(locationName);
                     //var locationId = data[dataIndex].id;
                     //console.log(locationId);
                     var locationCard =
@@ -393,7 +393,7 @@ $(document).ready(function () {
         $(".btn-updatelocation").on("click", function() {
             var type = $(this).data("type");
             locationId = $(this).attr("data-location-id");
-            console.log(locationId);
+            //console.log(locationId);
             if (type === "location") {
             $("#locationUpdateModal").modal('show');
             }
@@ -431,7 +431,7 @@ $(document).ready(function () {
                 var option = $('<option></option>').attr('value', department.id).text(department.name);
                 departmentSelect.append(option);
                 });
-                /*console.log(result);*/
+                //console.log(result);
             } else {
                 $('#personnelAddModal .modal-title').text("Error retrieving data");
             }
@@ -489,7 +489,7 @@ $(document).ready(function () {
 
   /**********************************************************Update Personnel Modal****************************************************************************************/
     $('#personnelUpdateModal').on('show.bs.modal', function () {
-        /*console.log("Employee ID:", employeeId);*/
+        //console.log("Employee ID:", employeeId);
         $.ajax({
             url: "Php/getPersonnelByID.php",
             type: 'GET',
@@ -790,8 +790,8 @@ $(document).ready(function () {
         var updatedDepartmentName = $('#updateDepartmentName').val();
         var updatedLocationID = $('#updateLocationDropdown').val();
         //console.log(departmentId);
-        console.log(updatedDepartmentName);
-        console.log(updatedLocationID);
+        //console.log(updatedDepartmentName);
+        //console.log(updatedLocationID);
 
         // AJAX call to update the personnel data
         $.ajax({
@@ -959,9 +959,9 @@ $(document).ready(function () {
                 var resultCode = result.status.code;
 
                 if (resultCode == 200) {
-                    console.log(result);
-                    console.log("Location Name:", result.data[0].name);
-                    console.log("Location Id:", result.data[0].id);
+                    //console.log(result);
+                    //console.log("Location Name:", result.data[0].name);
+                    //console.log("Location Id:", result.data[0].id);
                     $('#locationID').val(result.data[0].id);
                    $('#updateLocationName').val(result.data[0].name);
     
@@ -986,7 +986,7 @@ $(document).ready(function () {
         var updatedLocationName = $('#updateLocationName').val();
         //var updatedLocationID = $('#updateLocationDropdown').val();
         //console.log(locationId);
-        console.log(updatedLocationName);
+        //console.log(updatedLocationName);
         //console.log(updatedLocationID);
 
         // AJAX call to update the personnel data
