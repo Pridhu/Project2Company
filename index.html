@@ -26,6 +26,7 @@
   </div>
   <div class="tab-content" id="myTabContent">
     <!----------------------------------------------------------------Personnel NavTab------------------------------------------------------------------------------->
+
     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
       <div class="container-fluid mt-5 pt-lg-5">
         <nav class="navbar bg-light">
@@ -38,10 +39,15 @@
           </form>
         </nav>
       </div>
-      <div class="row text-center" id="cardPersonnelRow"></div>
+      <div class="row text-center" id="cardPersonnelRow">
+        <!--<div class="col-sm-3">
+          <div class="cardPersonnelbody"></div>-->
+        </div>
+      </div>
     </div>
-  </div>
+
     <!----------------------------------------------------------------Department NavTab------------------------------------------------------------------------------->
+
     <div class="tab-pane fade" id="department-tab-pane" role="tabpanel" aria-labelledby="department-tab" tabindex="0">
       <div class="container-fluid mt-5 pt-lg-5">
         <nav class="navbar bg-light">
@@ -53,10 +59,16 @@
             <input class="form-control ms-2" id="searchDepartmentInput" type="search" placeholder="Search" aria-label="Search">
           </form>
         </nav>
-      </div>
-      <div class="row text-center" id="cardDepartmentRow"></div>
     </div>
+      <div class="row text-center" id="cardDepartmentRow">
+        <div class="col-sm-3">
+          <div class="cardDepartmentbody"></div>
+        </div>
+      </div>
+    </div>
+
     <!----------------------------------------------------------------Location NavTab------------------------------------------------------------------------------->
+
     <div class="tab-pane fade" id="location-tab-pane" role="tabpanel" aria-labelledby="location-tab" tabindex="0">
       <div class="container-fluid mt-5 pt-lg-5">
         <nav class="navbar bg-light">
@@ -69,7 +81,11 @@
           </form>
         </nav>
       </div>
-      <div class="row text-center" id="cardLocationRow"></div>
+      <div class="row text-center" id="cardLocationRow">
+        <div class="col-sm-3">
+          <div class="cardLocationbody"></div>
+        </div>
+      </div>
     </div>
   </div>         
   <!--------------------------------------------------------Add Personnel Modal----------------------------------------------------------------------->

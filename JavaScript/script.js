@@ -1,5 +1,7 @@
 $(document).ready(function () {
     var searchQuery = "";
+    var searchDepartmentQuery = "";
+    var searchLocationQuery = "";
     var originalData;
     var employeeId;
     var departmentId;
@@ -7,6 +9,8 @@ $(document).ready(function () {
     var locationId;
     var locationRemoveName;
     var rowContainer;
+    var rowDepartmentContainer;
+    var rowLocationContainer;
 
     function fetchAllPersonnelData() {
         $.ajax({
@@ -153,17 +157,7 @@ $(document).ready(function () {
                     //var departmentName = response.data[0].name;
                     //console.log(departmentData);
                     //console.log(departmentName);
-        
-                    // If a search query is provided, filter the data
-                    if (searchQuery.trim() !== "") {
-                        var filteredDepartment = departmentData.filter(function (department) {
-                            var departmentName = department.name.toLowerCase();
-                            return departmentName.includes(searchQuery);
-                        });
-                        generateDepartmentCards(filteredDepartment);
-                    } else {
-                        generateDepartmentCards(departmentData);
-                    }
+                    generateDepartmentCards(departmentData);
                 } else {
                     console.error("Error: Unable to fetch data from PHP.");
                 }
@@ -177,7 +171,7 @@ $(document).ready(function () {
     // On page load fetch the initial data
     fetchAllDepartmentData();
 
-    function fetchDepartmentData(searchQuery = "") {
+    function fetchDepartmentData(searchDepartmentQuery) {
         $.ajax({
             url: "Php/getAllDepartments.php",
             type: "GET",
@@ -190,10 +184,10 @@ $(document).ready(function () {
                     //console.log(departmentName);
         
                     // If a search query is provided, filter the data
-                    if (searchQuery.trim() !== "") {
+                    if (searchDepartmentQuery.trim() !== "") {
                         var filteredDepartment = departmentData.filter(function (department) {
                             var departmentName = department.name.toLowerCase();
-                            return departmentName.includes(searchQuery);
+                            return departmentName.includes(searchDepartmentQuery);
                         });
                         generateDepartmentCards(filteredDepartment);
                     } else {
@@ -212,22 +206,22 @@ $(document).ready(function () {
     /*******************************************************SearchBarDepartment***********************************************************************/
     var searchDepartmentInput = $("#searchDepartmentInput");
     searchDepartmentInput.on("input", function () {
-        var searchQuery = searchDepartmentInput.val().trim().toLowerCase();
-        var rowContainer = $("#cardDepartmentRow");
-        rowContainer.empty();
-        fetchDepartmentData(searchQuery);
+        searchDepartmentQuery = searchDepartmentInput.val().trim().toLowerCase();
+        rowDepartmentContainer = $("#cardDepartmentRow");
+        rowDepartmentContainer.empty();
+        fetchDepartmentData(searchDepartmentQuery);
     });
 
     function  generateDepartmentCards(data) {
-        var rowContainer = $("#cardDepartmentRow");
+        rowDepartmentContainer = $("#cardDepartmentRow");
         // Initialize a counter to keep track of cards in the current row
-        var cardCounter = 0;
+        //var cardCounter = 0;
         var cardsPerRow = 2;
         var numRows = Math.ceil(data.length / cardsPerRow);
 
         for (var i = 0; i < numRows; i++) {
             var row = $("<div class='row text-center justify-content-center'></div>");
-            rowContainer.append(row);
+            rowDepartmentContainer.append(row);
 
             for (var j = 0; j < cardsPerRow; j++) {
                 var dataIndex = i * cardsPerRow + j;
@@ -365,7 +359,7 @@ $(document).ready(function () {
     function  generateLocationCards(data) {
         var rowContainer = $("#cardLocationRow");
         // Initialize a counter to keep track of cards in the current row
-        var cardCounter = 0;
+        //var cardCounter = 0;
         var cardsPerRow = 2;
         var numRows = Math.ceil(data.length / cardsPerRow);
 
@@ -443,11 +437,9 @@ $(document).ready(function () {
                 departments.sort((a, b) => parseInt(a.id) - parseInt(b.id));
                 var departmentSelect = $('#addDepartmentDropdown');
                 departmentSelect.empty();
-
                 departments.forEach(function (department) {
                 var option = $('<option></option>').attr('value', department.id).text(department.name);
                 departmentSelect.append(option);
-                
                 });
                 /*console.log(result);*/
             } else {
@@ -830,8 +822,8 @@ $(document).ready(function () {
                     $("#updateDepartmentAlertModal #modalDptUpdateBody").html("Department <strong>" + updatedDepartmentName + "</strong> updated successfully!");
                     $("#updateDepartmentAlertModal").modal("show");
                     $("#departmentUpdateModal").modal('hide');
-                    rowContainer.empty();
-                    fetchDepartmentData(searchQuery);
+                    rowDepartmentContainer.empty();
+                    fetchDepartmentData(searchDepartmentQuery);
                 } else {
                     $('#updateDepartmentAlertModal #modalDptUpdateTitle').text("Error retrieving data");
                 }
@@ -910,8 +902,8 @@ $(document).ready(function () {
                  $("#removeDepartmentAlertModal #modalRmoveDeptTitle").text("Alert");
                 $("#removeDepartmentAlertModal #modalRemoveDeptBody").html("Department <strong>" + departmentRemoveName + "</strong> removed successfully!");
                 $("#removeDepartmentAlertModal").modal("show");
-                rowContainer.empty();
-                fetchDepartmentData(searchQuery);
+                rowDepartmentContainer.empty();
+                fetchDepartmentData(searchDepartmentQuery);
               } else {
         
                 $('#departmentRemoveModal .modal-title').replaceWith("Error retrieving data");
