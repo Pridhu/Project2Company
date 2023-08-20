@@ -568,20 +568,6 @@ $(document).ready(function () {
                     $("#updateAlertModal #modalUpdateBody").html("Employee details of <strong>" + updatedFirstName + "</strong>, <strong>" + updatedLastName + "</strong> updated successfully!");
                     $("#updateAlertModal").modal("show");
                     $("#personnelUpdateModal").modal('hide');
-
-
-                    // Update the originalData array with the updated information
-                    var updatedPerson = originalData.find(person => person.id === employeeId);
-                    if (updatedPerson) {
-                        updatedPerson.firstName = updatedFirstName;
-                        updatedPerson.lastName = updatedLastName;
-                        updatedPerson.jobTitle = updatedJobTitle;
-                        updatedPerson.email = updatedEmail;
-                        updatedPerson.departmentID = updatedDepartmentID;
-                    }
-                    //console.log(updatedPerson);
-                    // Update the UI dynamically
-                    //console.log(searchQuery);
                     rowContainer.empty();
                     fetchPersonnelData(searchQuery);
 
